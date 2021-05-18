@@ -12,7 +12,7 @@ const LoginPage = () => {
             <View style={styles.loginContainer}>
                 <Wrapper style={styles.logoBox}>
                     <Image style={styles.logo} source={MainLogo} />
-                    <Text style={styles.logoText}>PERPUSTAKAAN YP SIM MEDAN</Text>
+                    <Text style={styles.logoText}>PERPUSTAKAAN YAYASAN SULTAN</Text>
                 </Wrapper>
                 <Wrapper style={styles.inputBox}>
                     <Textfield style={{marginTop:20, borderRadius:5}} placeholder="User Number"/>
