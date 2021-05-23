@@ -1,5 +1,5 @@
 import React from 'react'
-import {Text, StyleSheet, Button, View} from 'react-native'
+import {vText, StyleSheet, Button, View} from 'react-native'
 
 const HomePage = ({navigation}) => {
     return (

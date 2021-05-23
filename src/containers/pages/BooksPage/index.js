@@ -1,16 +1,15 @@
 import React from 'react'
-import {Text, StyleSheet, Button, View} from 'react-native'
+import { StyleSheet, Text, TextInput, View,Image, Button,ScrollView } from 'react-native'
+import Books from '../../../components/atoms/Books'
+const BooksPage = ({navigation}) => {
+    return(
+        <Books />
 
-const BookPage = ({navigation}) => {
-    return (
-        <View>
-            <Button title="BooksPage" onPress={() => {navigation.navigate("LoginPage")}}/>
-        </View>
     )
 }
 
 const styles = StyleSheet.create({
-
+    
 })
 
-export default BookPage
+export default BooksPage
