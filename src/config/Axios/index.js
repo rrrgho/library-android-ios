@@ -13,7 +13,7 @@ const POST = async (endpoint,data) => {
     return result
 }
 
-
 export {
-    POST
+    POST,
+    
 }

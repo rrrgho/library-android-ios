@@ -1,10 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { StyleSheet, Text, TextInput, View,Image, Button,ScrollView } from 'react-native'
-import SearchButton from '../../../components/atoms/SearchButton'
-import HeaderHome from '../../../components/atoms/moleculs/HeaderHome'
+import MainButton from '../../../components/atoms/MainButton'   
 import Textfield from '../../../components/atoms/Textfield'
-import BInggris from '../../../assets/images/b.inggris.jpg'
-import Matematika from '../../../assets/images/matematika1.jpeg'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import {
   responsiveHeight,
@@ -12,15 +9,25 @@ import {
   responsiveFontSize,
 } from 'react-native-responsive-dimensions';
 import { NavigationContainer } from '@react-navigation/native';
+import { Alert } from 'react-native'
+import { GET } from '../../../config/Axios'
 const Books = ({navigation}) => {
+    const [isProcessing,setIsProcessing] = useState(false)
     return (
         <View style={styles.container}>
             <ScrollView>
-                <HeaderHome />
                     <Text style={styles.searchbooks}>Cari Buku</Text>
                     <Text style={styles.judulone}>Temukan buku yang kamu cari dengan mengetik judul buku !</Text>
                     <TextInput style={styles.inputbooks} placeholder="Cari buku berdasarkan judul buku"></TextInput>
-                    <SearchButton  />
+                    <MainButton onPress={() => {handleAlert()}}  containerStyle={{
+                        width: responsiveWidth(90),
+                        height: responsiveHeight(7),
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        alignSelf: 'center',
+                        borderRadius: 10,
+                        marginTop: responsiveHeight(1.1),
+                    }} fade={isProcessing} touchable={!isProcessing ? true : false}  title={!isProcessing ? "Login" : 'Loading ...'} />
                     <View style={styles.cardImageBox}>
                         <Image style={{width:responsiveWidth(90), flex:1, height:responsiveHeight(20), borderTopLeftRadius:10, borderTopRightRadius:10}}  source={{uri: 'https://vcunited.club/wp-content/uploads/2020/01/No-image-available-2.jpg'}} />
                     </View> 
