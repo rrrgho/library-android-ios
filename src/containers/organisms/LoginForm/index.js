@@ -7,6 +7,7 @@ import Textfield from '../../../components/atoms/Textfield'
 import MainButton from '../../../components/atoms/MainButton'
 import { POST } from '../../../config/Axios'
 import { useNavigation } from '@react-navigation/native';
+import { AsyncStorage } from 'react-native';
 
 const LoginForm = () => {
     const navigation = useNavigation();
@@ -15,13 +16,18 @@ const LoginForm = () => {
     const [isProcessing,setIsProcessing] = useState(false)
 
     const handleLogin = async () => {
-        // let data = {
-        //     user_number : userNumber,
-        //     password : password
-        // }
-        // let request = await POST('/login',data)
-        // console.log(request)
-        navigation.navigate("HomePage")
+        setIsProcessing(true)
+        let data = {
+            user_number : userNumber,
+            password : password
+        }
+        let request = await POST('/login',data)
+        if(request.status === 200){
+            let response = request.data.data
+            await AsyncStorage.setItem('access_token',response.token)
+            setIsProcessing(false)
+            navigation.navigate("HomePage")
+        }
 
     }
     return (
@@ -32,7 +38,7 @@ const LoginForm = () => {
             </Wrapper>
             <Wrapper style={styles.inputBox}>
                 <Textfield onChangeText={(value) => {setUserNumber(value)}} style={{marginTop:20, borderRadius:5}} placeholder="User Number"/>
-                <Textfield onChangeText={(value) => {setPassword(value)}} style={{marginTop:20, borderRadius:5}} placeholder="Password"/>
+                <Textfield onChangeText={(value) => {setPassword(value)}} password style={{marginTop:20, borderRadius:5}} placeholder="Password"/>
                 <MainButton onPress={() => {handleLogin()}}  containerStyle={{marginTop:20, borderRadius:5}} fade={isProcessing} touchable={!isProcessing ? true : false}  title={!isProcessing ? "Login" : 'Loading ...'} />
             </Wrapper>
         </>
