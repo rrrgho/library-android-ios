@@ -4,7 +4,7 @@ import {Text, StyleSheet, Button, View} from 'react-native'
 const HomePage = ({navigation}) => {
     return (
         <View>
-            <Button title="Login" onPress={() => {navigation.navigate("LoginPage")}}/>
+            <Button title="Home Page" onPress={() => {navigation.navigate("LoginPage")}}/>
         </View>
     )
 }

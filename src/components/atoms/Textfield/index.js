@@ -7,7 +7,7 @@ const Textfield = (props) => {
     return (
         <View style={[styles.container,style]}>
             <View style={styles.textInputBox}>
-                <TextInput style={{color:colorDark}} placeholder={placeholder ?? 'Your placeholder'}/>
+                <TextInput onChangeText={props.onChangeText} style={{color:colorDark}} placeholderTextColor={colorDark} placeholder={placeholder ?? 'Your placeholder'}/>
             </View>
             <View style={styles.iconBox}>
 
