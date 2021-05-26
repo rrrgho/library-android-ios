@@ -1,16 +1,31 @@
 import React from 'react'
-import {Text, StyleSheet, Button, View} from 'react-native'
+import {StyleSheet, View, ScrollView, Dimensions} from 'react-native'
+import NavigationReport from '../../../components/moleculs/NavigationReport'
+import HeaderHome from '../../../components/moleculs/HeaderHome'
+import Slider from '../../../components/moleculs/Slider'
 
-const HomePage = ({navigation}) => {
+
+const {width} = Dimensions.get("window");
+const {height} = width *100 / 60;
+
+const HomePage = ({navigation, style, ...props}) => {
     return (
         <View>
-            <Button title="Login" onPress={() => {navigation.navigate("LoginPage")}}/>
+            <HeaderHome/>
+            <ScrollView>
+                <Slider/>
+                <Slider/>
+                </ScrollView>                
+            <NavigationReport/>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
-
+    container:{
+        width:'100%',
+        position:'relative',
+    },
 })
 
 export default HomePage
