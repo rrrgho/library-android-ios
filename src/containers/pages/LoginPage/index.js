@@ -1,24 +1,27 @@
-import React from 'react'
-import {StyleSheet, Text, View, Image} from 'react-native'
-import MainButton from '../../../components/atoms/MainButton'
-import Textfield from '../../../components/atoms/Textfield'
-import Wrapper from '../../../components/atoms/Wrapper'
+import React, { useEffect } from 'react'
+import { StyleSheet, Text, View } from 'react-native'
+import {Auth} from '../../../config/Auth'
+import LoginForm from '../../organisms/LoginForm'
 import { colorDark, colorPrimary } from '../../utils/color'
-import MainLogo from '../../../assets/images/mainlogo.jpeg'
 
-const LoginPage = () => {
+const LoginPage = ({navigation}) => {
+    useEffect( async () => {
+        if(await Auth()){
+            navigation.navigate("HomePage")
+        }        
+    },[])
+
+    useEffect(
+        () =>
+          navigation.addListener('beforeRemove', (e) => {
+            e.preventDefault();
+          }),
+        []
+      );
     return (
         <>
             <View style={styles.loginContainer}>
-                <Wrapper style={styles.logoBox}>
-                    <Image style={styles.logo} source={MainLogo} />
-                    <Text style={styles.logoText}>PERPUSTAKAAN YP SIM MEDAN</Text>
-                </Wrapper>
-                <Wrapper style={styles.inputBox}>
-                    <Textfield style={{marginTop:20, borderRadius:5}} placeholder="User Number"/>
-                    <Textfield style={{marginTop:20, borderRadius:5}} placeholder="Password"/>
-                    <MainButton  containerStyle={{marginTop:20, borderRadius:5}} fade={false} touchable={false}  title={'Login'} />
-                </Wrapper>
+                <LoginForm />
             </View>
             <View style={styles.loginFooter}>
                 <Text style={{color:colorDark}}>Don't have account? </Text>
@@ -41,25 +44,6 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         borderTopWidth:1,
         borderTopColor:"#eee"
-    },
-    logoBox:{
-        flex:1,
-        backgroundColor:'#fff',
-        justifyContent:'center',
-        alignItems:'center'
-    },
-    logo:{
-        width:150,
-        height:150
-    },
-    logoText:{
-        marginTop:20,
-        fontSize:20,
-        color:colorDark,
-        fontWeight:'bold'
-    },
-    inputBox:{
-        height:500
     },
 })
 
