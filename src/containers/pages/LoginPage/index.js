@@ -4,12 +4,20 @@ import {Auth} from '../../../config/Auth'
 import LoginForm from '../../organisms/LoginForm'
 import { colorDark, colorPrimary } from '../../utils/color'
 
-const LoginPage = () => {
+const LoginPage = ({navigation}) => {
     useEffect( async () => {
-        if(!await Auth()){
-            alert("Home")
-        }
+        if(await Auth()){
+            navigation.navigate("BooksPage")
+        }        
     },[])
+
+    useEffect(
+        () =>
+          navigation.addListener('beforeRemove', (e) => {
+            e.preventDefault();
+          }),
+        []
+      );
     return (
         <>
             <View style={styles.loginContainer}>
