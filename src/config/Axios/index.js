@@ -4,7 +4,7 @@ import { AsyncStorage } from 'react-native';
 
 const access_token = async () => {
     let token = await AsyncStorage.getItem('access_token')
-    return token
+    return `Bearer ${token}`
 }
 
 const POST = async (endpoint,data) => {
@@ -18,11 +18,21 @@ const POST = async (endpoint,data) => {
     })
     return result
 }
-
+const GET = async (endpoint) => {
+    let result = false
+    await axios.get(`${BASE_URL}${endpoint}`)
+    .then(response => {
+        result = response
+    })
+    .catch((error) => {
+        result = error.response.status
+    })
+    return result
+}
 
 const POSTAUTH = async (endpoint,data) => {
     let result = false
-    await axios.post(`${BASE_URL}${endpoint}`,data, { headers: {"Authorization" : `Bearer ${access_token()}`} })
+    await axios.post(`${BASE_URL}${endpoint}`,data, { headers: {"Authorization" : await access_token()} })
     .then(response => {
         result = response
     })
@@ -34,7 +44,7 @@ const POSTAUTH = async (endpoint,data) => {
 
 const GETAUTH = async (endpoint) => {
     let result = false
-    await axios.post(`${BASE_URL}${endpoint}`, { headers: {"Authorization" : `Bearer ${access_token()}`} })
+    await axios.get(`${BASE_URL}${endpoint}`, { headers: {"Authorization" : await access_token()} })
     .then(response => {
         result = response
     })
@@ -47,6 +57,7 @@ const GETAUTH = async (endpoint) => {
 
 export {
     POST,
+    GET,
     POSTAUTH,
     GETAUTH
 }

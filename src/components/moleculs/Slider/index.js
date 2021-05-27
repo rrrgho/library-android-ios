@@ -12,6 +12,7 @@ import {
 
 import songs from './data';
 
+
 const { width, height } = Dimensions.get("window");
 
 export default function Slider() {
