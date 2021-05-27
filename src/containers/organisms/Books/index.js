@@ -33,6 +33,12 @@ const Books = ({navigation}) => {
         //     console.log(res)
         // })
     }
+
+
+    const testGetBuku = async () => {
+        let request = await GETAUTH('/book-data')
+        console.log(request)
+    }
     return (
         <View style={styles.container}>
             
@@ -40,7 +46,7 @@ const Books = ({navigation}) => {
                     <Text style={styles.searchbooks}>Cari Buku</Text>
                     <Text style={styles.judulone}>Temukan buku yang kamu cari dengan mengetik judul buku !</Text>
                     <TextInput style={styles.inputbooks} placeholder="Cari buku berdasarkan judul buku"></TextInput>
-                    <SearchButton onPress={() => {getDataBooks()}}  containerStyle={{
+                    <SearchButton onPress={() => {testGetBuku()}}  containerStyle={{
                         width: responsiveWidth(90),
                         height: responsiveHeight(7),
                         alignItems: 'center',

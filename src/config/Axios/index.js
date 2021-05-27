@@ -4,7 +4,7 @@ import { AsyncStorage } from 'react-native';
 
 const access_token = async () => {
     let token = await AsyncStorage.getItem('access_token')
-    return token
+    return `Bearer ${token}`
 }
 
 const POST = async (endpoint,data) => {
@@ -32,7 +32,7 @@ const GET = async (endpoint) => {
 
 const POSTAUTH = async (endpoint,data) => {
     let result = false
-    await axios.post(`${BASE_URL}${endpoint}`,data, { headers: {"Authorization" : `Bearer ${access_token()}`} })
+    await axios.post(`${BASE_URL}${endpoint}`,data, { headers: {"Authorization" : await access_token()} })
     .then(response => {
         result = response
     })
@@ -44,7 +44,7 @@ const POSTAUTH = async (endpoint,data) => {
 
 const GETAUTH = async (endpoint) => {
     let result = false
-    await axios.get(`${BASE_URL}${endpoint}`, { headers: {"Authorization" : `Bearer ${access_token()}`} })
+    await axios.get(`${BASE_URL}${endpoint}`, { headers: {"Authorization" : await access_token()} })
     .then(response => {
         result = response
     })
