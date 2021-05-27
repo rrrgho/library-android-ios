@@ -16,11 +16,7 @@ const Books = ({navigation}) => {
     const [isProcessing,setIsProcessing] = useState(false)
  
     const getDataBooks = () => {
-        let request = GETAUTH('/book-data',{
-            // headers:{
-            //     'Authorization': `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5IiwianRpIjoiY2I4M2NmNTMyNzIxZmQwNTAzMTdiMTA0MDkwMDEwZDEyY2NiZGZmMmI3ZmY1YWY3NzNiMGJkZmE2ZDgzNDYxOGMxNzk0NDNjZGRkYmEyNjAiLCJpYXQiOjE2MjIxMTk2MjksIm5iZiI6MTYyMjExOTYyOSwiZXhwIjoxNjUzNjU1NjI5LCJzdWIiOiIxMSIsInNjb3BlcyI6W119.uopwAePqLov1gzngk_oZH_OtEhATwP5ZRFMZ63Mv6_GVUO9UXgpHcuSHfnnoqVIcSFgLarxNoEXsxeh5aaD-SLojLrhV_sbVeURknd9t_Vq7201kNOFP5n_1LSaa3SCY51TGvEAYQ5_5K4RrMYsw4ym47ROD0974Jz1uc2Zb9YoJSYHaPGKmiV_ETz2IAdQ72bk20oBwHsLnNq0Vh4U7LRvl6LSXNr-h-Spj15EPTQn6501Shn6hYNH5si_1TJikmKus3_6q3ygduzs9Tr16Y92erMhKoAnli0gTCQTa5K9w_dZVXqMtx9QkNGWgXilUJET9fQrW7NfDq7s3GLWB8ZVGm2qurh2dU4K8gFlzc16Bm9hBO0GIGfRxgDzpC3c0rt1pnryg1IaSA2if4obPfYb4P1Hjp-tch38rhKtklxEnyOC3jsKQnFKIwLwdSWCe6l3U0kgAzAHra7Nrv5Cmmkm90uvHSuydOQIz-9X28YtYf3iCDX0HotNq1vcmvuGhu9icLtSIwqgMatGW-puu3AxS1oEfZ6wRuvhdDrKd7btnVukWVu5VMBYEISfgLy1XxFOxmH4O1WG3K0qmuLS8GDwY2I_bQA_pVXbLfgRFED_XR6ZSN6inwPC7iY0NRfQDwAYrQC-rKP2ZafI0rbxuPQKkPgHBC5VD_vlDu2tFZBA`
-            // }
-        })
+        let request = GETAUTH('/book-data')
         setIsProcessing(true)
         // console.log(request)
         if(request.status === 200){
