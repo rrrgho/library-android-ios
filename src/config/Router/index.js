@@ -11,9 +11,9 @@ const Router = () => {
             <Stack.Navigator screenOptions={{
                 headerShown: false
             }}>
-                <Stack.Screen name="SplashScreen" component={SplashScreen} />
-                <Stack.Screen name="LoginPage" component={LoginPage} />
                 <Stack.Screen name="HomePage" component={HomePage} />
+                <Stack.Screen name="LoginPage" component={LoginPage} />
+                <Stack.Screen name="SplashScreen" component={SplashScreen} />
             </Stack.Navigator>
         </>
     )

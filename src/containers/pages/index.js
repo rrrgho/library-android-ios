@@ -3,7 +3,7 @@ import LoginPage from './LoginPage'
 import HomePage from './HomePage'
 
 export {
-    SplashScreen,
+    HomePage,
     LoginPage,
-    HomePage
+    SplashScreen,
 }
