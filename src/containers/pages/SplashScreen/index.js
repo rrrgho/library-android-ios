@@ -7,7 +7,7 @@ import { Auth } from '../../../config/Auth'
 
 const SplashScreen = ({navigation}) => {
     useEffect(async () => {
-        if(!await Auth()){
+        if(await Auth()){
             setTimeout(() => {
                 navigation.navigate("LoginPage")
             },2000)
