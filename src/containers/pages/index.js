@@ -5,7 +5,7 @@ import BooksPage from './BooksPage'
 
 export {
     // SplashScreen,
-    // LoginPage,
+    LoginPage,
     BooksPage,
     HomePage,
 }

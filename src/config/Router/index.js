@@ -14,7 +14,7 @@ const Router = () => {
                 headerShown: false
             }}>
                 {/* <Stack.Screen name="SplashScreen" component={SplashScreen} /> */}
-                {/* <Stack.Screen name="LoginPage" component={LoginPage} /> */}
+                <Stack.Screen name="LoginPage" component={LoginPage} />
                 <Stack.Screen name="BooksPage" component={BooksPage} />
                 <Stack.Screen name="HomePage" component={HomePage} />
 
