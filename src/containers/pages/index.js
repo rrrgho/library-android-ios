@@ -5,9 +5,11 @@ import HomePage from './HomePage'
 import BooksPage from './BooksPage'
 
 export {
-    SplashScreen,
+    // SplashScreen,
+    // LoginPage,
+    // SplashScreen,
     LoginPage,
-    ProfilePage,
+    // ProfilePage,
     BooksPage,
     HomePage,
 }
