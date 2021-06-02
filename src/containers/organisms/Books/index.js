@@ -6,7 +6,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import {
   responsiveHeight,
   responsiveWidth,
-  responsiveFontSize,
+  responsiveFontSize
 } from 'react-native-responsive-dimensions';
 import axios from "axios"
 import { NavigationContainer } from '@react-navigation/native';

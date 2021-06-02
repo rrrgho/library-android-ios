@@ -11,7 +11,17 @@ import {
 } from "react-native";
 
 import songs from './data';
+import { GET } from '../../../config/Axios'
 
+const getSlider = async () => {
+  await GET('/slide-banner')
+  .then((res) =>{
+    console.log(res)
+  })
+  .catch((err) => {
+    console.log(err)
+  })
+}
 
 const { width, height } = Dimensions.get("window");
 
@@ -46,10 +56,10 @@ export default function Slider() {
       scrollX.removeAllListeners();
     };
   }, []);
-
   const renderItem = ({ index, item }) => {
     return (
       <Animated.View
+      onPress={() => {getSlider()}}
         style={{
           alignItems: "center",
           width: width,
