@@ -7,7 +7,7 @@ import BooksPage from './BooksPage'
 export {
     // SplashScreen,
     // LoginPage,
-    SplashScreen,
+    // SplashScreen,
     LoginPage,
     // ProfilePage,
     BooksPage,

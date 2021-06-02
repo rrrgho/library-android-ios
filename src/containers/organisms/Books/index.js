@@ -1,48 +1,61 @@
 import React, { useEffect,useState } from 'react'
 import { StyleSheet, Text, TextInput, View,Image, Button,ScrollView, Item,FlatList } from 'react-native'
 import SearchButton from '../../../components/atoms/SearchButton'   
-import Textfield from '../../../components/atoms/Textfield'
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import {
   responsiveHeight,
   responsiveWidth,
   responsiveFontSize,
 } from 'react-native-responsive-dimensions';
-import axios from "axios"
 import { NavigationContainer } from '@react-navigation/native';
 import { AsyncStorage } from 'react-native';
 import { GETAUTH } from '../../../config/Axios'
+import { connect } from 'react-redux';
 import ImgaeBooks from '../../../assets/images/notfoundbook.jpg'
-import { cos } from 'react-native-reanimated';
+import { SET_BOOK_DATA, SET_REMOVE_BOOK, SET_SEARCH_BOOK } from '../../../config/Redux/action'
 const Books = (props) => {
-    const [isProcessing,setIsProcessing] = useState(false);
-    const [books,setBooks] = useState([]);
-    const ItemBooks = ({name,creator,cover,codebook,ready}) =>{
-        return(
+    const [isProcessing,setIsProcessing] = useState(false)
+    const [books] = useState();
+    // const ItemBooks = ({name,creator,cover,codebook,ready}) =>{
+    //     return(
+    //         <View style={styles.container}>
+    //             <View>
+    //             <Image style={styles.cardImageBox} source={cover ?? ImgaeBooks} />
+    //                 <Text style={styles.Title}>{name}</Text>
+    //                 <Text style={styles.TextContent}>Creator: {creator}</Text>
+    //                 <Text style={styles.TextContent}>Kode: {codebook}</Text>
+    //                 {/* <Text style={styles.TextContent}>{ready}</Text> */}
+    //             </View>
+    //         </View>
             
-            <View style={styles.container}>
-                <View>
-                <Image style={styles.cardImageBox} source={cover ?? ImgaeBooks} />
-                    <Text style={styles.Title}>{name}</Text>
-                    <Text style={styles.TextContent}>Creator: {creator}</Text>
-                    <Text style={styles.TextContent}>Kode: {codebook}</Text>
-                    <Text style={styles.TextContent}>{ready ? "Tersedia" : "Tidak Tersedia"}</Text>
-                </View>
-            </View>
-            
-        )
-    }
-    useEffect(() =>{
-        getDataBooks();
-    },[]);
+    //     )
+    // }
+   
     const getDataBooks = async () =>{
-        await GETAUTH(`/book-data?page=1`)
-        .then(res =>{
-            setBooks(res.data.data.data)
-            console.log(res)
+        let send = await GETAUTH(`book-data?page=${props.booksData.page}`);
+        let result = send.data.data
+        let array = books ?? []
+        result.data.map(item =>{
+            array.push(item)
         })
-        
+
+        let dataBookState = {
+            data : array,
+            page : props.booksData.page + 1
+        }
+        props.updateBook(dataBookState)
+        // await GETAUTH(`/book-data?page=1`)
+        // .then((res) =>{
+        //     console.log(res)
+        // })
     }
+    useEffect(() => {
+        // if(props.booksData.page == 1){
+        //     // getDataBooks()
+            
+        // }
+        getDataBooks()
+        console.log(dataBookState)
+    },[])
     return (
         <View style={styles.container}>
             <ScrollView >
@@ -58,9 +71,10 @@ const Books = (props) => {
                     borderRadius: 10,
                     marginTop: responsiveHeight(1.1),
                 }} fade={isProcessing} touchable={!isProcessing ? true : false}  title={!isProcessing ? "Cari Buku" : 'Loading ...'} />
-                {books.map(book => {
+                {/* {books.map(book => {
                     return <ItemBooks name={book.name} creator={book.creator} codebook={book.code_of_book} ready={book.ready}  />
-                })}
+                    
+                })} */}
             </ScrollView>
         </View>
     )
@@ -146,4 +160,14 @@ const styles = StyleSheet.create({
         height: 100,
     }
 })
-export default Books
+const mapStateToProps = (state) => {
+    return {
+        booksData : state.bookReducer
+    }
+}
+const mapDispatchToProps = (dispatch) => {
+    return {
+        updateBook: (value) => {dispatch(SET_BOOK_DATA(value))},
+    }
+}
+export default connect(mapDispatchToProps,mapStateToProps)(Books);
