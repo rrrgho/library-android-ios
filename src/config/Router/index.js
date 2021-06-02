@@ -16,10 +16,10 @@ const Router = () => {
                 {/* <Stack.Screen name="SplashScreen" component={SplashScreen} /> */}
                 {/* <Stack.Screen name="LoginPage" component={LoginPage} /> */}
                 {/* <Stack.Screen name="SplashScreen" component={SplashScreen} /> */}
-                <Stack.Screen name="LoginPage" component={LoginPage} />
+                {/* <Stack.Screen name="LoginPage" component={LoginPage} /> */}
                 {/* <Stack.Screen name="ProfilePage" component={ProfilePage} /> */}
                 <Stack.Screen name="BooksPage" component={BooksPage} />
-                <Stack.Screen name="HomePage" component={HomePage} />
+                {/* <Stack.Screen name="HomePage" component={HomePage} /> */}
 
             </Stack.Navigator>
         </>

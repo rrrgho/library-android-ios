@@ -35,7 +35,7 @@ const Books = (props) => {
         let result = send.data.data
         let array = books ?? []
         result.data.map(item =>{
-            array.push(item)
+            array.push(item) 
         })
 
         let dataBookState = {
@@ -49,12 +49,13 @@ const Books = (props) => {
         // })
     }
     useEffect(() => {
+        console.log(props.booksData)
         // if(props.booksData.page == 1){
         //     // getDataBooks()
             
         // }
-        getDataBooks()
-        console.log(dataBookState)
+        // getDataBooks()
+        // console.log(dataBookState)
     },[])
     return (
         <View style={styles.container}>
@@ -170,4 +171,4 @@ const mapDispatchToProps = (dispatch) => {
         updateBook: (value) => {dispatch(SET_BOOK_DATA(value))},
     }
 }
-export default connect(mapDispatchToProps,mapStateToProps)(Books);
+export default connect(mapStateToProps,mapDispatchToProps)(Books);
