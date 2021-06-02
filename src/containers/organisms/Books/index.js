@@ -1,4 +1,4 @@
-import React, { useEffect,useState } from 'react'
+simport React, { useEffect,useState } from 'react'
 import { StyleSheet, Text, TextInput, View,Image, Button,ScrollView, Item,FlatList } from 'react-native'
 import SearchButton from '../../../components/atoms/SearchButton'   
 import {
@@ -35,7 +35,7 @@ const Books = (props) => {
         let result = send.data.data
         let array = books ?? []
         result.data.map(item =>{
-            array.push(item)
+            array.push(item) 
         })
 
         let dataBookState = {
@@ -50,7 +50,7 @@ const Books = (props) => {
     }
     useEffect(() => {
         if(props.booksData.page == 1){
-            // getDataBooks()
+            getDataBooks()
             
         }
     },[])
