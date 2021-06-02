@@ -1,101 +1,81 @@
 import React, { useEffect,useState } from 'react'
-import { StyleSheet, Text, TextInput, View,Image, Button,ScrollView } from 'react-native'
+import { StyleSheet, Text, TextInput, View,Image, Button,ScrollView, Item,FlatList } from 'react-native'
 import SearchButton from '../../../components/atoms/SearchButton'   
-import Textfield from '../../../components/atoms/Textfield'
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import {
   responsiveHeight,
   responsiveWidth,
   responsiveFontSize
 } from 'react-native-responsive-dimensions';
-import axios from "axios"
 import { NavigationContainer } from '@react-navigation/native';
 import { AsyncStorage } from 'react-native';
 import { GETAUTH } from '../../../config/Axios'
-const Books = ({navigation}) => {
+import { connect } from 'react-redux';
+import ImgaeBooks from '../../../assets/images/notfoundbook.jpg'
+import { SET_BOOK_DATA, SET_REMOVE_BOOK, SET_SEARCH_BOOK } from '../../../config/Redux/action'
+const Books = (props) => {
     const [isProcessing,setIsProcessing] = useState(false)
- 
-    const getDataBooks = () => {
-        let request = GETAUTH('/book-data',{
-            // headers:{
-            //     'Authorization': `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5IiwianRpIjoiY2I4M2NmNTMyNzIxZmQwNTAzMTdiMTA0MDkwMDEwZDEyY2NiZGZmMmI3ZmY1YWY3NzNiMGJkZmE2ZDgzNDYxOGMxNzk0NDNjZGRkYmEyNjAiLCJpYXQiOjE2MjIxMTk2MjksIm5iZiI6MTYyMjExOTYyOSwiZXhwIjoxNjUzNjU1NjI5LCJzdWIiOiIxMSIsInNjb3BlcyI6W119.uopwAePqLov1gzngk_oZH_OtEhATwP5ZRFMZ63Mv6_GVUO9UXgpHcuSHfnnoqVIcSFgLarxNoEXsxeh5aaD-SLojLrhV_sbVeURknd9t_Vq7201kNOFP5n_1LSaa3SCY51TGvEAYQ5_5K4RrMYsw4ym47ROD0974Jz1uc2Zb9YoJSYHaPGKmiV_ETz2IAdQ72bk20oBwHsLnNq0Vh4U7LRvl6LSXNr-h-Spj15EPTQn6501Shn6hYNH5si_1TJikmKus3_6q3ygduzs9Tr16Y92erMhKoAnli0gTCQTa5K9w_dZVXqMtx9QkNGWgXilUJET9fQrW7NfDq7s3GLWB8ZVGm2qurh2dU4K8gFlzc16Bm9hBO0GIGfRxgDzpC3c0rt1pnryg1IaSA2if4obPfYb4P1Hjp-tch38rhKtklxEnyOC3jsKQnFKIwLwdSWCe6l3U0kgAzAHra7Nrv5Cmmkm90uvHSuydOQIz-9X28YtYf3iCDX0HotNq1vcmvuGhu9icLtSIwqgMatGW-puu3AxS1oEfZ6wRuvhdDrKd7btnVukWVu5VMBYEISfgLy1XxFOxmH4O1WG3K0qmuLS8GDwY2I_bQA_pVXbLfgRFED_XR6ZSN6inwPC7iY0NRfQDwAYrQC-rKP2ZafI0rbxuPQKkPgHBC5VD_vlDu2tFZBA`
-            // }
+    const [books] = useState();
+    // const ItemBooks = ({name,creator,cover,codebook,ready}) =>{
+    //     return(
+    //         <View style={styles.container}>
+    //             <View>
+    //             <Image style={styles.cardImageBox} source={cover ?? ImgaeBooks} />
+    //                 <Text style={styles.Title}>{name}</Text>
+    //                 <Text style={styles.TextContent}>Creator: {creator}</Text>
+    //                 <Text style={styles.TextContent}>Kode: {codebook}</Text>
+    //                 {/* <Text style={styles.TextContent}>{ready}</Text> */}
+    //             </View>
+    //         </View>
+            
+    //     )
+    // }
+   
+    const getDataBooks = async () =>{
+        let send = await GETAUTH(`book-data?page=${props.booksData.page}`);
+        let result = send.data.data
+        let array = books ?? []
+        result.data.map(item =>{
+            array.push(item) 
         })
-        setIsProcessing(true)
-        // console.log(request)
-        if(request.status === 200){
-            setIsProcessing(false)
-            console.log(request)
+
+        let dataBookState = {
+            data : array,
+            page : props.booksData.page + 1
         }
-        // $token ='eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5IiwianRpIjoiY2I4M2NmNTMyNzIxZmQwNTAzMTdiMTA0MDkwMDEwZDEyY2NiZGZmMmI3ZmY1YWY3NzNiMGJkZmE2ZDgzNDYxOGMxNzk0NDNjZGRkYmEyNjAiLCJpYXQiOjE2MjIxMTk2MjksIm5iZiI6MTYyMjExOTYyOSwiZXhwIjoxNjUzNjU1NjI5LCJzdWIiOiIxMSIsInNjb3BlcyI6W119.uopwAePqLov1gzngk_oZH_OtEhATwP5ZRFMZ63Mv6_GVUO9UXgpHcuSHfnnoqVIcSFgLarxNoEXsxeh5aaD-SLojLrhV_sbVeURknd9t_Vq7201kNOFP5n_1LSaa3SCY51TGvEAYQ5_5K4RrMYsw4ym47ROD0974Jz1uc2Zb9YoJSYHaPGKmiV_ETz2IAdQ72bk20oBwHsLnNq0Vh4U7LRvl6LSXNr-h-Spj15EPTQn6501Shn6hYNH5si_1TJikmKus3_6q3ygduzs9Tr16Y92erMhKoAnli0gTCQTa5K9w_dZVXqMtx9QkNGWgXilUJET9fQrW7NfDq7s3GLWB8ZVGm2qurh2dU4K8gFlzc16Bm9hBO0GIGfRxgDzpC3c0rt1pnryg1IaSA2if4obPfYb4P1Hjp-tch38rhKtklxEnyOC3jsKQnFKIwLwdSWCe6l3U0kgAzAHra7Nrv5Cmmkm90uvHSuydOQIz-9X28YtYf3iCDX0HotNq1vcmvuGhu9icLtSIwqgMatGW-puu3AxS1oEfZ6wRuvhdDrKd7btnVukWVu5VMBYEISfgLy1XxFOxmH4O1WG3K0qmuLS8GDwY2I_bQA_pVXbLfgRFED_XR6ZSN6inwPC7iY0NRfQDwAYrQC-rKP2ZafI0rbxuPQKkPgHBC5VD_vlDu2tFZBA';
-        // axios.get('http://admin.ypsimlibrary.com/api/book-data',{
-        //     headers:{
-        //         'Authorization': `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5IiwianRpIjoiY2I4M2NmNTMyNzIxZmQwNTAzMTdiMTA0MDkwMDEwZDEyY2NiZGZmMmI3ZmY1YWY3NzNiMGJkZmE2ZDgzNDYxOGMxNzk0NDNjZGRkYmEyNjAiLCJpYXQiOjE2MjIxMTk2MjksIm5iZiI6MTYyMjExOTYyOSwiZXhwIjoxNjUzNjU1NjI5LCJzdWIiOiIxMSIsInNjb3BlcyI6W119.uopwAePqLov1gzngk_oZH_OtEhATwP5ZRFMZ63Mv6_GVUO9UXgpHcuSHfnnoqVIcSFgLarxNoEXsxeh5aaD-SLojLrhV_sbVeURknd9t_Vq7201kNOFP5n_1LSaa3SCY51TGvEAYQ5_5K4RrMYsw4ym47ROD0974Jz1uc2Zb9YoJSYHaPGKmiV_ETz2IAdQ72bk20oBwHsLnNq0Vh4U7LRvl6LSXNr-h-Spj15EPTQn6501Shn6hYNH5si_1TJikmKus3_6q3ygduzs9Tr16Y92erMhKoAnli0gTCQTa5K9w_dZVXqMtx9QkNGWgXilUJET9fQrW7NfDq7s3GLWB8ZVGm2qurh2dU4K8gFlzc16Bm9hBO0GIGfRxgDzpC3c0rt1pnryg1IaSA2if4obPfYb4P1Hjp-tch38rhKtklxEnyOC3jsKQnFKIwLwdSWCe6l3U0kgAzAHra7Nrv5Cmmkm90uvHSuydOQIz-9X28YtYf3iCDX0HotNq1vcmvuGhu9icLtSIwqgMatGW-puu3AxS1oEfZ6wRuvhdDrKd7btnVukWVu5VMBYEISfgLy1XxFOxmH4O1WG3K0qmuLS8GDwY2I_bQA_pVXbLfgRFED_XR6ZSN6inwPC7iY0NRfQDwAYrQC-rKP2ZafI0rbxuPQKkPgHBC5VD_vlDu2tFZBA`
-        //     }
-        // })
+        props.updateBook(dataBookState)
+        // await GETAUTH(`/book-data?page=1`)
         // .then((res) =>{
         //     console.log(res)
         // })
     }
-
-
-    const testGetBuku = async () => {
-        let request = await GETAUTH('/book-data')
-        console.log(request)
-    }
+    useEffect(() => {
+        console.log(props.booksData)
+        // if(props.booksData.page == 1){
+        //     // getDataBooks()
+            
+        // }
+        // getDataBooks()
+        // console.log(dataBookState)
+    },[])
     return (
         <View style={styles.container}>
-            
-            <ScrollView>
-                    <Text style={styles.searchbooks}>Cari Buku</Text>
-                    <Text style={styles.judulone}>Temukan buku yang kamu cari dengan mengetik judul buku !</Text>
-                    <TextInput style={styles.inputbooks} placeholder="Cari buku berdasarkan judul buku"></TextInput>
-                    <SearchButton onPress={() => {testGetBuku()}}  containerStyle={{
-                        width: responsiveWidth(90),
-                        height: responsiveHeight(7),
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        alignSelf: 'center',
-                        borderRadius: 10,
-                        marginTop: responsiveHeight(1.1),
-                    }} fade={isProcessing} touchable={!isProcessing ? true : false}  title={!isProcessing ? "Cari Buku" : 'Loading ...'} />
-                    <View style={styles.cardImageBox}>
-                        <Image style={{width:responsiveWidth(90), flex:1, height:responsiveHeight(20), borderTopLeftRadius:10, borderTopRightRadius:10}}  source={{uri: 'https://vcunited.club/wp-content/uploads/2020/01/No-image-available-2.jpg'}} />
-                    </View> 
-                    <View style={styles.cardTitleBox}>
-                        <Text style={styles.Title}>Bahasa Inggris SD</Text>
-                        <Text style={styles.TextContent}>
-                            Karya : Hasiswa Mikroskil
-                        </Text>
-                        <Text style={styles.TextStok}>
-                            Tersedia
-                        </Text>
-                    </View>
-                <View style={styles.cardImageBox}>
-                    <Image style={{width:responsiveWidth(90), flex:1, height:responsiveHeight(20), borderTopLeftRadius:10, borderTopRightRadius:10}}  source={{uri: 'https://vcunited.club/wp-content/uploads/2020/01/No-image-available-2.jpg'}} />
-                </View> 
-                <View style={styles.cardTitleBox}>
-                    <Text style={styles.Title}>Bahasa Inggris SD</Text>
-                    <Text style={styles.TextContent}>
-                        Karya : Hasiswa Mikroskil
-                    </Text>
-                    <Text style={styles.TextStok}>
-                        Tersedia
-                    </Text>
-                </View>
-
-                <View style={styles.cardImageBox}>
-                    <Image style={{width:responsiveWidth(90), flex:1, height:responsiveHeight(20), borderTopLeftRadius:10, borderTopRightRadius:10}}  source={{uri: 'https://vcunited.club/wp-content/uploads/2020/01/No-image-available-2.jpg'}} />
-                </View> 
-                <View style={styles.cardTitleBox}>
-                    <Text style={styles.Title}>Bahasa Inggris SD</Text>
-                    <Text style={styles.TextContent}>
-                        Karya : Hasiswa Mikroskil
-                    </Text>
-                    <Text style={styles.TextStok}>
-                        Tersedia
-                    </Text>
-                </View>
+            <ScrollView >
+                <Text style={styles.searchbooks}>Cari Buku</Text>
+                <Text style={styles.judulone}>Temukan buku yang kamu cari dengan mengetik judul buku !</Text>
+                <TextInput style={styles.inputbooks} placeholder="Cari buku berdasarkan judul buku"></TextInput>
+                <SearchButton containerStyle={{
+                    width: responsiveWidth(90),
+                    height: responsiveHeight(7),
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    alignSelf: 'center',
+                    borderRadius: 10,
+                    marginTop: responsiveHeight(1.1),
+                }} fade={isProcessing} touchable={!isProcessing ? true : false}  title={!isProcessing ? "Cari Buku" : 'Loading ...'} />
+                {/* {books.map(book => {
+                    return <ItemBooks name={book.name} creator={book.creator} codebook={book.code_of_book} ready={book.ready}  />
+                    
+                })} */}
             </ScrollView>
         </View>
     )
@@ -181,4 +161,14 @@ const styles = StyleSheet.create({
         height: 100,
     }
 })
-export default Books
+const mapStateToProps = (state) => {
+    return {
+        booksData : state.bookReducer
+    }
+}
+const mapDispatchToProps = (dispatch) => {
+    return {
+        updateBook: (value) => {dispatch(SET_BOOK_DATA(value))},
+    }
+}
+export default connect(mapStateToProps,mapDispatchToProps)(Books);

@@ -12,11 +12,16 @@
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
+<<<<<<< HEAD
     "@fortawesome/react-fontawesome": "^0.1.14",
+=======
+    "@fortawesome/react-native-fontawesome": "^0.2.6",
+>>>>>>> develop
     "@react-native-async-storage/async-storage": "^1.15.4",
     "@react-native-community/masked-view": "^0.1.11",
     "@react-navigation/native": "^5.9.4",
     "@react-navigation/stack": "^5.14.5",
+    "@reduxjs/toolkit": "^1.5.1",
     "axios": "^0.21.1",
     "font-awesome": "^4.7.0",
     "fontawesome": "^5.6.3",
@@ -30,7 +35,10 @@
     "react-native-reanimated": "^2.1.0",
     "react-native-responsive-dimensions": "^3.1.1",
     "react-native-safe-area-context": "^3.2.0",
-    "react-native-screens": "^3.2.0"
+    "react-native-screens": "^3.2.0",
+    "react-native-svg": "^12.1.1",
+    "react-redux": "^7.2.4",
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "@babel/core": "7.14.3",
