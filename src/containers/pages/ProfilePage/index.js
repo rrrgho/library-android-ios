@@ -12,8 +12,7 @@ const ProfilePage = () => {
                     <ProfileHeader />
                 </Wrapper>
             </View>
-            <View style={styles.contentContainer}>
-
+            <View style={styles.contentContainer}> 
             </View>
         </>
     )
