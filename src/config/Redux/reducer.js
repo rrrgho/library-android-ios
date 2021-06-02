@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux'
-import ActionType from './actionType'
+import bookReducer from './BookReducer/BookReducer'
 const initialState = {
     data : "Hello World"
 }
@@ -7,48 +7,7 @@ const initialState = {
 const initialReducer = (state = initialState, action) => {
     return state
 }
-// Books Reducer
-const bookState = {
-    books:undefined,
-    page:1,
-    pageSearch:1,
-    booksTmp:undefined,
-}
-const bookReducer = (state = bookState, action) => {
-    if(action.type === ActionType.SET_BOOK){
-        let array = state.books ?? []
-        action.inputValue.data.map(item => {
-            array.push(item)
-        })
-        return{
-            ...state,
-            books: array,
-            page:action.inputValue.page
-        }
-    }
-    if(action.type === ActionType.SET_LOOK_BOOK){
-        let tmp = state.books
-        let array = state.booksTmp ?? []
-        action.inputValue.data.map(item => {
-            array.push(item)
-        })
-        return{
-            ...state,
-            books: array,
-            pageSearch:action.inputValue.page,
-            booksTmp:tmp
-        }
-    }
-    if(action.type === ActionType.SET_ROLLBACK_BOOK){
-        return{
-            ...state,
-            books:state.booksTmp,
-            booksTmp:undefined,
-            pageSearch:1
-        }
-    }
-    return state
-}
+
 export default combineReducers({
     initialReducer,
     bookReducer,

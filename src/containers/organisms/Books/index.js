@@ -35,7 +35,7 @@ const Books = (props) => {
         let result = send.data.data
         let array = books ?? []
         result.data.map(item =>{
-            array.push(item)
+            array.push(item) 
         })
 
         let dataBookState = {
@@ -43,18 +43,11 @@ const Books = (props) => {
             page : props.booksData.page + 1
         }
         props.updateBook(dataBookState)
-        // await GETAUTH(`/book-data?page=1`)
-        // .then((res) =>{
-        //     console.log(res)
-        // })
     }
     useEffect(() => {
         if(props.booksData.page == 1){
-            // getDataBooks()
-            
+            getDataBooks()
         }
-        // getDataBooks()
-        // console.log(dataBookState)
     },[])
     return (
         <View style={styles.container}>
