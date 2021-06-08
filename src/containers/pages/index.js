@@ -10,6 +10,6 @@ export {
     LoginPage,
     HomePage,
     BooksPage,
-    // BookDetail,
+    BookDetail,
     // ProfilePage,
 }

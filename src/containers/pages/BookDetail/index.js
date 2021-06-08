@@ -5,8 +5,7 @@ import HeaderHome from '../../../components/atoms/moleculs/HeaderHome'
 const BookDetail = (props) => {
 
     return(
-       <HeaderHome />
-
+        <Text>Halaman Detail Buku</Text>
     )
 }
 
