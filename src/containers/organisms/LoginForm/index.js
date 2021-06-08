@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from 'react'
-import {StyleSheet, Text, View, Image} from 'react-native'
-import Wrapper from '../../../components/atoms/Wrapper'
-import { colorDark, colorPrimary } from '../../utils/color'
+import { useNavigation } from '@react-navigation/native'
+import React, { useState } from 'react'
+import { AsyncStorage, Image, StyleSheet, Text } from 'react-native'
 import MainLogo from '../../../assets/images/mainlogo.jpeg'
-import Textfield from '../../../components/atoms/Textfield'
 import MainButton from '../../../components/atoms/MainButton'
+import Textfield from '../../../components/atoms/Textfield'
+import Wrapper from '../../../components/atoms/Wrapper'
 import { POST } from '../../../config/Axios'
-import { useNavigation } from '@react-navigation/native';
-import { AsyncStorage } from 'react-native';
-import {connect} from 'react-redux'
+import { colorDark, colorPrimary } from '../../utils/color'
 
 const LoginForm = (props) => {
     const navigation = useNavigation();
@@ -26,9 +24,10 @@ const LoginForm = (props) => {
             let request = await POST('/login',data)
             if(request.status === 200){
                 let response = request.data.data
+                await AsyncStorage.setItem('identity', JSON.stringify({name: response.name, user_number : response.user_number, level : response.level}))
                 await AsyncStorage.setItem('access_token',response.token)
                 setIsProcessing(false)
-                navigation.navigate("BooksPage")
+                navigation.navigate("ProfilePage")
             }
         }else{
             setIsProcessing(false)
@@ -37,9 +36,7 @@ const LoginForm = (props) => {
 
     }
 
-    useEffect(() => {
-        console.log(props.initialState)
-    },[])
+
     return (
         <>
             <Wrapper style={styles.logoBox}>
@@ -56,11 +53,7 @@ const LoginForm = (props) => {
     )
 }
 
-const reduxState = (state) => {
-    return {
-        initialState : state.initialReducer
-    }
-}
+
 
 const styles = StyleSheet.create({
     logoBox:{
@@ -90,4 +83,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default connect(reduxState,null)(LoginForm)
+export default (LoginForm)
