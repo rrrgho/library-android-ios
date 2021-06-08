@@ -2,7 +2,7 @@ import React from 'react'
 import {View,Text,StyleSheet} from 'react-native'
 import Wrapper from '../../../components/atoms/Wrapper'
 import { colorPrimary } from '../../utils/color'
-import ProfileHeader from '../ProfileHeader'
+import ProfileHeader from '../../organisms/ProfileHeader'
 
 const ProfilePage = () => {
     return (
