@@ -13,14 +13,14 @@ const SET_BOOK_DATA = (value) => {
         inputValue : value
     }
 }
-export const SET_SEARCH_BOOK = (value) => {
+const SET_SEARCH_BOOK = (value) => {
     return {
         type: ActionType.SET_LOOK_BOOK,
         inputValue : value
     }
 }
 
-export const SET_REMOVE_BOOK = () => {
+const SET_REMOVE_BOOK = () => {
     return {
         type : ActionType.SET_ROLLBACK_BOOK
     }
