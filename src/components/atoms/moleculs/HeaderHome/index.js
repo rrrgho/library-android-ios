@@ -1,18 +1,30 @@
 import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { StyleSheet, View, Platform, TextInput } from 'react-native';
+import { StyleSheet, View, Platform } from 'react-native';
+import { faArrowAltCircleLeft, faArrowLeft, faUserAlt } from '@fortawesome/free-solid-svg-icons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { HomePage } from '../../../../containers/pages/HomePage';
 import { useNavigation } from '@react-navigation/native';
+
 const HeaderHome = (props) => {
-    const navigation = useNavigation();
-    return(
+    const navigation = useNavigation()
+    return (
         <View style={[styles.headerAuth]}>
-            <TouchableOpacity style={[styles.backBox]} onPress={() => navigation.goBack()}>
-                
+            
+            {/* <TouchableOpacity style={[styles.backBox]} onPress={() => navigation.goBack()}>
+                {
+                props.goBack ?
+                    <FontAwesomeIcon style={styles.icon} size={20} icon={faArrowLeft}/>
+                :''
+                }
+            </TouchableOpacity> */}
+            <TouchableOpacity onPress={() => {navigation.goBack()}} style={[styles.backBox]}>
+                <FontAwesomeIcon style={styles.icon} size={20} icon={faArrowLeft}/>
             </TouchableOpacity>
         </View>
     )
 }
+
 const styles = StyleSheet.create({
     headerAuth:{
         width:'100%',
