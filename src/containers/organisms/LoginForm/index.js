@@ -28,7 +28,7 @@ const LoginForm = (props) => {
                 let response = request.data.data
                 await AsyncStorage.setItem('access_token',response.token)
                 setIsProcessing(false)
-                navigation.navigate("BooksPage")
+                navigation.navigate("HomePage")
             }
         }else{
             setIsProcessing(false)

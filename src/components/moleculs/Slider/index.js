@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState } from "react"
 import {
   View,
   SafeAreaView,
@@ -8,10 +8,12 @@ import {
   Dimensions,
   Animated,
   StyleSheet,
-} from "react-native";
-
-import songs from './data';
+} from "react-native"
+import axios from 'axios'
+import songs from './data'
 import { GET } from '../../../config/Axios'
+import BASE_URL from '../../../config/BaseUrl'
+import { connect } from 'react-redux'
 
 const getSlider = async () => {
   await GET('/slide-banner')
@@ -23,9 +25,16 @@ const getSlider = async () => {
   })
 }
 
+const setBanner = () =>  async (dispatch) => {
+  let request = await axios.get(BASE_URL+'slide-banner')
+  let data = request.data.data
+  dispatch({type:ActionType.SET_BANNER, value:data})
+}
+
+
 const { width, height } = Dimensions.get("window");
 
-export default function Slider() {
+const Slider = (props) => {
   const scrollX = useRef(new Animated.Value(0)).current;
 
   const slider = useRef(null);
@@ -33,12 +42,10 @@ export default function Slider() {
 
   // for tranlating the album art
   const position = useRef(Animated.divide(scrollX, width)).current;
-
   useEffect(() => {
     // position.addListener(({ value }) => {
     //   console.log(value);
     // });
-
     scrollX.addListener(({ value }) => {
       const val = Math.round(value / width);
 
@@ -119,3 +126,7 @@ const styles = StyleSheet.create({
     maxHeight: 205,
   },
 });
+
+export default Slider
+
+//export default connect(mapStateToProps,mapDispatchToProps)(Slider)

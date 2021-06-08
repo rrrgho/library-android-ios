@@ -8,8 +8,8 @@ export {
     // SplashScreen,
     // LoginPage,
     // SplashScreen,
-    LoginPage,
-    // ProfilePage,
-    BooksPage,
     HomePage,
+    LoginPage,
+    ProfilePage,
+    BooksPage,
 }
