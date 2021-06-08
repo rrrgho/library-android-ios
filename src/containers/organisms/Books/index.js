@@ -12,7 +12,8 @@ import ShimmerPlaceholder from 'react-native-shimmer-placeholder'
 import ImgaeBooks from '../../../assets/images/notfoundbook.jpg'
 import { SET_BOOK_DATA, SET_REMOVE_BOOK, SET_SEARCH_BOOK } from '../../../config/Redux/action'
 import HeaderHome from '../../../components/atoms/moleculs/HeaderHome'
-
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
 const Books = (props) => {
     const [isProcessing,setIsProcessing] = useState(false)
     const [isLoadMore,setIsLoadmore] = useState(false)
@@ -20,6 +21,7 @@ const Books = (props) => {
     const [books] = useState();
     const [inSearch,setInSearch] = useState(false)
     const [bookSearchInput,setBookSearchInput] = useState(false)
+    const navigation = useNavigation()
     const getDataBooks = async () =>{
         let send = await GETAUTH(`/book-data?page=${props.booksData.page}`);
         let result = send.data.data
@@ -95,6 +97,9 @@ const Books = (props) => {
             getDataBooks()
         }
     },[])
+    const getDetailBook = (book_id) =>{
+        navigation.push(`/book-detail/${book_id}`)
+    }
     return (
         <View style={styles.container}>
                 <ScrollView >
@@ -119,18 +124,20 @@ const Books = (props) => {
                         <Text>Loading!!</Text> :
                         props.booksData.books.map((item, i) => {
                             return(
-                                <View style={styles.container}>
-                                    <View>
-                                    <Image style={styles.cardImageBox} source={item.cover ?? ImgaeBooks} />
-                                        <Text style={styles.Title}>{item.name}</Text>
-                                        <Text style={styles.TextContent}>{item.description ?? 'Tidak ada deskripsi buku'}</Text>
-                                        <Text style={styles.TextContent}>Creator: {item.creator}</Text>
-                                        <Text style={styles.TextContent}>Kode: {item.code_of_book}</Text>
-                                        {
-                                            item.ready ? <Text style={styles.TextContent}>Tersedia</Text> :
-                                            <Text style={styles.TextContent}>Tidak Tersedia</Text>
-                                        }
-                                    </View>
+                                <View style={styles.container} >
+                                    <TouchableOpacity onPress={() => {navigation.navigate('BookDetail')}}>
+                                        <View>
+                                            <Image style={styles.cardImageBox} source={item.cover ?? ImgaeBooks} />
+                                            <Text style={styles.Title}>{item.name}</Text>
+                                            <Text style={styles.TextContent}>{item.description ?? 'Tidak ada deskripsi buku'}</Text>
+                                            <Text style={styles.TextContent}>Creator: {item.creator}</Text>
+                                            <Text style={styles.TextContent}>Kode: {item.code_of_book}</Text>
+                                            {
+                                                item.ready ? <Text style={styles.TextContent}>Tersedia</Text> :
+                                                <Text style={styles.TextContent}>Tidak Tersedia</Text>
+                                            }
+                                        </View>
+                                    </TouchableOpacity>
                                 </View>  
                             )
                         })
@@ -143,6 +150,7 @@ const Books = (props) => {
                 </ScrollView>
         </View>
     )
+
 }
 const styles = StyleSheet.create({
     card:{

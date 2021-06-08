@@ -7,18 +7,18 @@ import { HomePage } from '../../../../containers/pages/HomePage';
 import { useNavigation } from '@react-navigation/native';
 
 const HeaderHome = (props) => {
-    const navigation = useNavigation();
+    const navigation = useNavigation()
     return (
         <View style={[styles.headerAuth]}>
             
             {/* <TouchableOpacity style={[styles.backBox]} onPress={() => navigation.goBack()}>
                 {
                 props.goBack ?
-                <FontAwesomeIcon style={styles.icon} size={20} icon={faArrowLeft}/>
+                    <FontAwesomeIcon style={styles.icon} size={20} icon={faArrowLeft}/>
                 :''
                 }
             </TouchableOpacity> */}
-            <TouchableOpacity onPress={() => {navigation.navigate('HomePage')}} style={[styles.backBox]}>
+            <TouchableOpacity onPress={() => {navigation.goBack()}} style={[styles.backBox]}>
                 <FontAwesomeIcon style={styles.icon} size={20} icon={faArrowLeft}/>
             </TouchableOpacity>
         </View>

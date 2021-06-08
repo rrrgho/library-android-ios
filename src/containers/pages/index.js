@@ -3,11 +3,13 @@ import LoginPage from './LoginPage'
 import ProfilePage from './ProfilePage'
 import HomePage from './HomePage'
 import BooksPage from './BooksPage'
+import BookDetail from './BookDetail'
 
 export {
     SplashScreen,
     LoginPage,
-    BooksPage,
     HomePage,
-    ProfilePage,
+    BooksPage,
+    // BookDetail,
+    // ProfilePage,
 }

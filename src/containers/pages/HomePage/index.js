@@ -2,8 +2,10 @@ import {vText, StyleSheet, Button, View} from 'react-native'
 import React, { useEffect } from 'react'
 import { Auth } from '../../../config/Auth'
 import { AsyncStorage } from 'react-native';
-
-const HomePage = ({navigation}) => {
+import { useNavigation } from '@react-navigation/native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+const HomePage = () => {
+    const navigation = useNavigation();
     useEffect(() => {
         navigation.addListener('beforeRemove', (e) => {
             e.preventDefault();
@@ -18,7 +20,7 @@ const HomePage = ({navigation}) => {
     },[])
     return (
         <View>
-            <Button title="Home Page" onPress={() => {navigation.navigate("LoginPage")}}/>
+            <Button title="Books Page" onPress={() => {navigation.navigate("BooksPage")}}/>
         </View>
     )
 }
