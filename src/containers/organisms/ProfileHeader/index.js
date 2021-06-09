@@ -28,16 +28,6 @@ const ProfileHeader = (props) => {
                     <Text style={{fontSize:20,color:'#fff',fontWeight:'bold'}}>{identity && identity.name}</Text>
                 </View>
 
-                    <Dialog
-                        visible={true}
-                        onTouchOutside={() => {
-                            setShowLevel(false)
-                        }}
-                    >
-                        <DialogContent>
-                            <Text>Rian</Text>
-                        </DialogContent>
-                    </Dialog>
             </View>
         </>
     )

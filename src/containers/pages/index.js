@@ -3,6 +3,7 @@ import LoginPage from './LoginPage'
 import ProfilePage from './ProfilePage'
 import HomePage from './HomePage'
 import BooksPage from './BooksPage'
+import HistoryPage from './HistoryPage'
 
 export {
     SplashScreen,
@@ -10,4 +11,5 @@ export {
     ProfilePage,
     BooksPage,
     HomePage,
+    HistoryPage
 }
