@@ -27,7 +27,7 @@ const LoginForm = (props) => {
                 await AsyncStorage.setItem('identity', JSON.stringify({name: response.name, user_number : response.user_number, level : response.level}))
                 await AsyncStorage.setItem('access_token',response.token)
                 setIsProcessing(false)
-                navigation.navigate("ProfilePage")
+                navigation.navigate("HomePage")
             }
         }else{
             setIsProcessing(false)

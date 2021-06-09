@@ -12,10 +12,25 @@ const SET_BOOK_DATA = (value) => {
         type: ActionType.SET_BOOK,
         inputValue : value
     }
-}  
+}
+export const SET_SEARCH_BOOK = (value) => {
+    return {
+        type: ActionType.SET_LOOK_BOOK,
+        inputValue : value
+    }
+}
+
+export const SET_REMOVE_BOOK = () => {
+    return {
+        type : ActionType.SET_ROLLBACK_BOOK
+    }
+}   
+  
 
 
 export {
     SET_INITIAL,
-    SET_BOOK_DATA
+    SET_BOOK_DATA,
+    SET_SEARCH_BOOK,
+    SET_REMOVE_BOOK,
 }

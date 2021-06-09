@@ -1,12 +1,11 @@
 import React from 'react'
 import { StyleSheet, Text, TextInput, View,Image, Button,ScrollView } from 'react-native'
-import Books from '../../organisms/Books'
 import axios from "axios"
-// import { TouchableOpacity } from 'react-native-gesture-handler';
-const BooksPage = ({navigation}) => {
+import HeaderHome from '../../../components/atoms/moleculs/HeaderHome'
+const BookDetail = (props) => {
 
     return(
-        <Books />
+        <Text>Halaman Detail Buku</Text>
     )
 }
 
@@ -14,4 +13,4 @@ const styles = StyleSheet.create({
     
 })
 
-export default BooksPage
+export default BookDetail
