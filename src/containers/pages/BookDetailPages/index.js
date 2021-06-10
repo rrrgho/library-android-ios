@@ -9,7 +9,7 @@ import ImgaeBooks from '../../../assets/images/notfoundbook.jpg'
 // import QRCode from 'react-native-qrcode-generator';
 import MainButton from '../../../components/atoms/MainButton'
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { GETAUTH } from '../../../config/Axios'
+import { GETAUTH, POSTAUTH } from '../../../config/Axios'
 const BookDetailPages = ({route,navigation},props) => {
     const {id,description,cover,code_of_book,category} = route.params
     const [book,setBook] = useState()
@@ -20,7 +20,19 @@ const BookDetailPages = ({route,navigation},props) => {
         // console.log(book)
     }
     const OrderBook = async () =>{ 
-        Alert.alert("elert peminjaman")
+        const data = {
+            book_id: id,
+        }
+        let send = await POSTAUTH('/order', data)
+        if(send.data.error === false)
+        {
+            Alert.alert('Good Job', send.data.message, 'success')
+            // setTimeout(() => {
+            //     navigation.navigate('BooksPage')
+            // }, 1000)
+        }else{
+            Alert.alert('Gagal Bro',send.data.message)
+        }
     }
     useEffect(() => {
         getData()
