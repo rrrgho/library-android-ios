@@ -14,8 +14,6 @@ import songs from './data'
 import { GET } from '../../../config/Axios'
 import BASE_URL from '../../../config/BaseUrl'
 import { connect } from 'react-redux'
-import { SET_BOOK_DATA, SET_REMOVE_BOOK, SET_SEARCH_BOOK } from '../../../config/Redux/action'
-
 
 const getSlider = async () => {
   await GET('/slide-banner')
@@ -32,7 +30,6 @@ const setBanner = () =>  async (dispatch) => {
   let data = request.data.data
   dispatch({type:ActionType.SET_BANNER, value:data})
 }
-
 
 const { width, height } = Dimensions.get("window");
 
