@@ -2,7 +2,8 @@ import React, { useState } from 'react'
 import {Text,View, StyleSheet, TouchableOpacity} from 'react-native'
 import Wrapper from '../../../components/atoms/Wrapper'
 import BookHistory from '../../organisms/BookHistory'
-import {colorPrimary} from '../../utils/color'
+import {colorBlur, colorDark, colorPrimary} from '../../utils/color'
+import Header from '../../../components/moleculs/Header'
 
 const HistoryPage = () => {
     const [activeMenu,setActiveMenu] = useState("ORDER ONGOING")
@@ -19,22 +20,25 @@ const HistoryPage = () => {
         }
     }
     return (
-       <View style={styles.container}>
-           <Wrapper style={styles.filterContainer}>
-                <TouchableOpacity onPress={() => {setActiveMenu("ORDER ONGOING")}} style={activeMenu === "ORDER ONGOING" ? styles.buttonFilterActive : styles.buttonFilterInActive}>
-                    <Text style={activeMenu === "ORDER ONGOING" ? styles.textButtonActive : styles.textButtonInActive}>Peminjaman Berjalan</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => {setActiveMenu("ORDER FINISHED")}} style={activeMenu === "ORDER FINISHED" ? styles.buttonFilterActive : styles.buttonFilterInActive}>
-                    <Text style={activeMenu === "ORDER FINISHED" ? styles.textButtonActive : styles.textButtonInActive}>Peminjaman Selesai</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => {setActiveMenu("ORDER HISTORY")}} style={activeMenu === "ORDER HISTORY" ? styles.buttonFilterActive : styles.buttonFilterInActive}>
-                    <Text style={activeMenu === "ORDER HISTORY" ? styles.textButtonActive : styles.textButtonInActive}>History Peminjaman</Text>
-                </TouchableOpacity>
-           </Wrapper>
-           <Wrapper>
-               {componentWillBeRendered()}
-           </Wrapper>
-       </View>
+        <>
+            <Header />
+            <View style={styles.container}>
+                <Wrapper style={styles.filterContainer}>
+                        <TouchableOpacity onPress={() => {setActiveMenu("ORDER ONGOING")}} style={activeMenu === "ORDER ONGOING" ? styles.buttonFilterActive : styles.buttonFilterInActive}>
+                            <Text style={activeMenu === "ORDER ONGOING" ? styles.textButtonActive : styles.textButtonInActive}>Berjalan</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => {setActiveMenu("ORDER FINISHED")}} style={activeMenu === "ORDER FINISHED" ? styles.buttonFilterActive : styles.buttonFilterInActive}>
+                            <Text style={activeMenu === "ORDER FINISHED" ? styles.textButtonActive : styles.textButtonInActive}>Selesai</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => {setActiveMenu("ORDER HISTORY")}} style={activeMenu === "ORDER HISTORY" ? styles.buttonFilterActive : styles.buttonFilterInActive}>
+                            <Text style={activeMenu === "ORDER HISTORY" ? styles.textButtonActive : styles.textButtonInActive}>Peminjaman</Text>
+                        </TouchableOpacity>
+                </Wrapper>
+                <Wrapper>
+                    {componentWillBeRendered()}
+                </Wrapper>
+            </View>
+       </>
     )
 }
 
