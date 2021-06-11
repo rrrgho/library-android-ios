@@ -1,18 +1,16 @@
-import React, { useEffect,useState } from 'react'
-import { StyleSheet, Text, TextInput, View,Image, Button,ScrollView, Item,FlatList } from 'react-native'
-import SearchButton from '../../../components/atoms/SearchButton'   
-import RemoveBooks from '../../../components/atoms/RemoveBooks'   
-import LoadMore from '../../../components/atoms/LoadMore'   
-import { responsiveHeight,responsiveWidth,responsiveFontSize} from 'react-native-responsive-dimensions';
-import { NavigationContainer } from '@react-navigation/native';
-import { AsyncStorage } from 'react-native';
-import { GETAUTH,POSTAUTH } from '../../../config/Axios'
-import { connect } from 'react-redux';
+import { useNavigation } from '@react-navigation/native'
+import React, { useEffect, useState } from 'react'
+import { Image, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions'
+import { connect } from 'react-redux'
 import ImgaeBooks from '../../../assets/images/notfoundbook.jpg'
-import { SET_BOOK_DATA, SET_REMOVE_BOOK, SET_SEARCH_BOOK } from '../../../config/Redux/action'
+import LoadMore from '../../../components/atoms/LoadMore'
 import HeaderHome from '../../../components/atoms/moleculs/HeaderHome'
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { useNavigation } from '@react-navigation/native';
+import RemoveBooks from '../../../components/atoms/RemoveBooks'
+import SearchButton from '../../../components/atoms/SearchButton'
+import { GETAUTH, POSTAUTH } from '../../../config/Axios'
+import { SET_BOOK_DATA, SET_REMOVE_BOOK, SET_SEARCH_BOOK } from '../../../config/Redux/action'
 const Books = (props) => {
     const [isProcessing,setIsProcessing] = useState(false)
     const [isLoadMore,setIsLoadmore] = useState(false)

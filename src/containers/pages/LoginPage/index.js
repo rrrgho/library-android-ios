@@ -7,7 +7,7 @@ import { colorDark, colorPrimary } from '../../utils/color'
 const LoginPage = ({navigation}) => {
     useEffect( async () => {
         if(await Auth()){
-            navigation.navigate("ProfilePage")
+            navigation.navigate("HistoryPage")
         }        
     },[])
 
