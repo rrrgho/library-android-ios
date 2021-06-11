@@ -8,8 +8,8 @@ import BookDetailPages from './BookDetailPages'
 export {
     SplashScreen,
     LoginPage,
-    // ProfilePage,
     HomePage,
+    ProfilePage,
     BooksPage,
     BookDetailPages,
     // ProfilePage,
