@@ -5,6 +5,9 @@ import HeaderHome from '../../../components/atoms/moleculs/HeaderHome'
 import { useNavigation } from '@react-navigation/native'
 import { responsiveHeight,responsiveWidth,responsiveFontSize} from 'react-native-responsive-dimensions'
 import ImgaeBooks from '../../../assets/images/notfoundbook.jpg'
+import Header from '../../../components/moleculs/Header'
+import QRCode from 'react-native-qrcode-svg';
+import SweetAlert from 'react-native-sweet-alert';
 // import swal from 'sweetalert'
 // import QRCode from 'react-native-qrcode-generator';
 import MainButton from '../../../components/atoms/MainButton'
@@ -37,9 +40,21 @@ const BookDetailPages = ({route,navigation},props) => {
     useEffect(() => {
         getData()
     },[])
+
+    const testing = () => {
+        SweetAlert.showAlertWithOptions({
+            title: 'aaaa',
+            subTitle: 'aaa',
+            otherButtonTitle: 'Cancel',
+            otherButtonColor: '#dedede',
+            style: 'success',
+            cancellable: true
+          });
+    }
     return(
+        <>
+        <Header />
         <View style={styles.container}>
-            <HeaderHome/>
             <ScrollView>
                     <Text style={styles.searchbooks}>Detail Buku</Text>
                     <Text style={styles.judulone}>Lihat selengkapnya tentang buku ini !</Text>                    
@@ -53,7 +68,7 @@ const BookDetailPages = ({route,navigation},props) => {
                     {
                         book && book.data.stock > 0 ? <Text style={styles.stockbooks}>Buku ini tersedia sebanyak {book && book.data.stock}</Text>
                         :
-                        <Text style={styles.stockbooks}>Mohon maaf, stok buku ini telah habis terpinjam</Text>
+                        <Text style={styles.stockbooks} onPress={() => {testing()}}>Mohon maaf, stok buku ini telah habis terpinjam</Text>
                     }
                     {
                         book && book.data.stock > 0 &&
@@ -71,8 +86,31 @@ const BookDetailPages = ({route,navigation},props) => {
                         />
                         
                     }
+
+                    <View>
+                    <QRCode
+                        // ref={myQRCode}
+                        //QR code value
+                        value={"asas"}
+                        //size of QR Code
+                        size={250}
+                        //Color of the QR Code (Optional)
+                        color="black"
+                        //Background Color of the QR Code (Optional)
+                        backgroundColor="white"
+                        //Center Logo size  (Optional)
+                        logoSize={30}
+                        //Center Logo margin (Optional)
+                        logoMargin={2}
+                        //Center Logo radius (Optional)
+                        logoBorderRadius={15}
+                        //Center Logo background (Optional)
+                        logoBackgroundColor="yellow"
+                        />
+                    </View>
             </ScrollView>
         </View>
+        </>
     )
 }
 

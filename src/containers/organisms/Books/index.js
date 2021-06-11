@@ -12,11 +12,23 @@ import { NavigationContainer } from '@react-navigation/native';
 import { AsyncStorage } from 'react-native';
 import { GETAUTH,POSTAUTH } from '../../../config/Axios'
 import { connect } from 'react-redux';
+import { faSearch, faSpinner } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { useNavigation } from '@react-navigation/native'
+import React, { useEffect, useState } from 'react'
+import { Image, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions'
+import { connect } from 'react-redux'
 import ImgaeBooks from '../../../assets/images/notfoundbook.jpg'
-import { SET_BOOK_DATA, SET_REMOVE_BOOK, SET_SEARCH_BOOK } from '../../../config/Redux/action'
+import LoadMore from '../../../components/atoms/LoadMore'
 import HeaderHome from '../../../components/atoms/moleculs/HeaderHome'
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { useNavigation } from '@react-navigation/native';
+import RemoveBooks from '../../../components/atoms/RemoveBooks'
+import SearchButton from '../../../components/atoms/SearchButton'
+import Wrapper from '../../../components/atoms/Wrapper'
+import { GETAUTH, POSTAUTH } from '../../../config/Axios'
+import { SET_BOOK_DATA, SET_REMOVE_BOOK, SET_SEARCH_BOOK } from '../../../config/Redux/action'
+import { colorBlur, colorDark, colorPrimary } from '../../utils/color'
 const Books = (props) => {
     const [isProcessing,setIsProcessing] = useState(false)
     const [isLoadMore,setIsLoadmore] = useState(false)
@@ -106,63 +118,74 @@ const Books = (props) => {
     }
     return (
         <View style={styles.container}>
-                <ScrollView >
-                    <HeaderHome />
-                    <Text style={styles.searchbooks}>Cari Buku</Text>
-                    <Text style={styles.judulone}>Temukan buku yang kamu cari dengan mengetik judul buku !</Text>
-                    <TextInput style={styles.inputbooks} placeholder="Cari buku berdasarkan judul buku" onChangeText={(value) => {setBookSearchInput(value)}}></TextInput>
-                    <SearchButton onPress={() => {searchBook()}} containerStyle={{
-                        width: responsiveWidth(90),
-                        height: responsiveHeight(7),
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        alignSelf: 'center',
-                        borderRadius: 10,
-                        marginTop: responsiveHeight(1.1),
-                    }} fade={isProcessing} touchable={!isProcessing ? true : false}  title={!isProcessing ? "Cari Buku" : 'Loading ...'} />
-                    {
-                        inSearch && <RemoveBooks onPress={() => {removeSearchBook()}} fade={isRemoveBooks} touchable={!isRemoveBooks ? true : false}  />
-                    }
-                    {
-                        !props.booksData.books ? 
-                        <Text>Loading!!</Text> :
-                        props.booksData.books.map((item, i) => {
-                            return(
-                                <View style={styles.container} >
-                                    <TouchableOpacity onPress={() => {navigation.navigate('BookDetailPages',{
-                                        'id': item.id,
-                                        'description': item.description,
-                                        'cover': item.cover,
-                                        'code_of_book': item.code_of_book,
-                                        'category': item.category,
-                                    })}} >
-                                        <View>
-                                            <Image style={styles.cardImageBox} source={item.cover ?? ImgaeBooks} />
-                                            <Text style={styles.Title}>{item.name}</Text>
-                                            <Text style={styles.TextContent}>{item.description ?? 'Tidak ada deskripsi buku'}</Text>
-                                            <Text style={styles.TextContent}>Creator: {item.creator}</Text>
-                                            <Text style={styles.TextContent}>Kode: {item.code_of_book}</Text>
-                                            {
-                                                item.ready ? <Text style={styles.TextContent}>Tersedia</Text> :
-                                                <Text style={styles.TextContent}>Tidak Tersedia</Text>
-                                            }
-                                        </View>
-                                    </TouchableOpacity>
-                                </View>  
-                            )
-                        })
-                    }
-                    {
-                        !inSearch && <LoadMore onPress={() => {getDataBooks()}} fade={isLoadMore} touchable={!isLoadMore ? true : false}  />
-                    }
+            <Wrapper>
+                <ScrollView style={{marginTop:10}}>
+                        {/* <Text style={styles.searchbooks}>Cari Buku</Text>
+                        <Text style={styles.judulone}>Temukan buku yang kamu cari dengan mengetik judul buku !</Text> */}
+                        <View style={styles.containerSearching}>
+                            <TextInput style={styles.inputbooks} placeholder="Cari buku berdasarkan judul buku" onChangeText={(value) => {setBookSearchInput(value)}}></TextInput>
+                            <SearchButton onPress={() => {searchBook()}} containerStyle={{
+                                width: responsiveWidth(15),
+                                marginLeft:5,
+                                height: responsiveHeight(7),
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                alignSelf: 'center',
+                                borderRadius: 10,
+                                marginTop: responsiveHeight(0),
+                            }} fade={isProcessing} touchable={!isProcessing ? true : false}  title={!isProcessing ? <FontAwesomeIcon icon={faSearch} style={{color:"#fff"}}/> : <FontAwesomeIcon icon={faSpinner} style={{color:'#fff'}}/>} />
+                        </View>
+                        {
+                            inSearch && <RemoveBooks onPress={() => {removeSearchBook()}} fade={isRemoveBooks} touchable={!isRemoveBooks ? true : false}  />
+                        }
+                        <View style={styles.container} >
+                        {
+                            !props.booksData.books ? 
+                            <Text>Loading!!</Text> :
+                            props.booksData.books.map((item, i) => {
+                                return(
+                                    <View style={{backgroundColor:'#fff', paddingBottom:10, borderColor:colorBlur, borderRadius:10, borderRadius:10, marginTop:10, borderWidth:2}} key={i}>
+                                        <TouchableOpacity onPress={() => {navigation.navigate('BookDetailPages',{
+                                            'id': item.id,
+                                            'description': item.description,
+                                            'cover': item.cover,
+                                            'code_of_book': item.code_of_book,
+                                            'category': item.category,
+                                        })}} >
+                                            <View>
+                                                <Image style={styles.cardImageBox} source={item.cover ?? ImgaeBooks} />
+                                                <Wrapper style={{paddingTop:10,}}>
+                                                    <Text style={styles.Title}>{item.name}</Text>
+                                                    <Text style={styles.TextContent}>{item.description ?? 'Tidak ada deskripsi buku'}</Text>
+                                                    <Text style={styles.TextContent}>Creator: {item.creator}</Text>
+                                                    <Text style={styles.TextContent}>Kode: {item.code_of_book}</Text>
+                                                    {
+                                                        item.ready ? <Text style={styles.TextContent}>Tersedia</Text> :
+                                                        <Text style={styles.TextContent}>Tidak Tersedia</Text>
+                                                    }
+                                                </Wrapper>
+                                            </View>
+                                        </TouchableOpacity>
+                                    </View>  
+                                )
+                            })
+                        }
+                        {
+                            !inSearch && <LoadMore onPress={() => {getDataBooks()}} fade={isLoadMore} touchable={!isLoadMore ? true : false}  />
+                        }
+                        </View>
                     
                 
                 </ScrollView>
+            </Wrapper>
         </View>
     )
 
 }
 const styles = StyleSheet.create({
+    containerSearching:{
+        flexDirection:'row'
+    },
     card:{
         width: responsiveWidth(90),
         height:responsiveHeight(7),
@@ -181,7 +204,6 @@ const styles = StyleSheet.create({
         height:200,
         borderTopLeftRadius:10,
         borderTopRightRadius:10,
-        marginTop: 10,
     },
     cardTitleBox:{
         width:'100%',
@@ -197,19 +219,15 @@ const styles = StyleSheet.create({
         fontSize: responsiveFontSize(2.2),
         fontWeight: 'bold',
         color: 'black',
-        marginLeft: 40,
     },
     TextContent:{
         fontSize: responsiveFontSize(1.5),
-        marginLeft: 40,
     },
     TextStok:{
         fontWeight: 'bold',
         color: '#81ed79',
-        marginLeft: 40,
     },
     container:{
-        marginTop: 5,
         flex:1,
         backgroundColor:'#fff',
         justifyContent: 'center',
@@ -218,16 +236,16 @@ const styles = StyleSheet.create({
     searchbooks:{
         textAlign:'center',
         fontWeight: '600',
-        fontSize: responsiveFontSize(2.9),
+        fontSize: responsiveFontSize(2.5),
     },
     judulone:{
         textAlign: 'center',
-        fontSize: responsiveFontSize(1.9),
+        fontSize: responsiveFontSize(1.2),
         fontWeight: '600',
         marginTop: 8,
     },
     inputbooks:{
-        width: responsiveWidth(90),
+        flex:1,
         height: responsiveHeight(7),
         borderWidth: 1,
         borderColor: '#DDD',

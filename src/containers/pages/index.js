@@ -4,7 +4,6 @@ import ProfilePage from './ProfilePage'
 import HomePage from './HomePage'
 import BooksPage from './BooksPage'
 import HistoryPage from './HistoryPage'
-import BookDetail from './BookDetail'
 import BookDetailPages from './BookDetailPages'
 
 export {
@@ -14,7 +13,5 @@ export {
     HomePage,
     HistoryPage,
     BooksPage,
-    BookDetail,
     BookDetailPages,
-    ProfilePage,
 }
