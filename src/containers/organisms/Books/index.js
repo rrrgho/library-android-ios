@@ -28,8 +28,8 @@ const Books = (props) => {
     const navigation = useNavigation()
     const getDataBooks = async () =>{
         let send = await GETAUTH(`/book-data?page=${props.booksData.page}`);
-        let result = send.data.data
-        // console.log(send)
+        // let result = send.data.data
+        console.log(send)
         let array = books ?? []
         result.data.map(item =>{
             array.push(item) 
@@ -70,7 +70,7 @@ const Books = (props) => {
                 let data = {
                     judul : bookSearchInput
                 }
-                let send = await POSTAUTH(`search-book`, data);
+                let send = await POSTAUTH(`/search-book`, data);
                 let result = send.data.data
                 console.log(result)
                 let array = []
