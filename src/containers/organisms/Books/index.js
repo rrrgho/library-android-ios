@@ -95,6 +95,7 @@ const Books = (props) => {
         if(props.booksData.page == 1){
             getDataBooks()
         }
+        getDetailBook()
     },[])
     const getDetailBook = (book_id) =>{
         navigation.push(`/book-detail/${book_id}`)
@@ -124,7 +125,13 @@ const Books = (props) => {
                         props.booksData.books.map((item, i) => {
                             return(
                                 <View style={styles.container} >
-                                    <TouchableOpacity onPress={() => {navigation.navigate('BookDetail')}}>
+                                    <TouchableOpacity onPress={() => {navigation.navigate('BookDetailPages',{
+                                        'id': item.id,
+                                        'description': item.description,
+                                        'cover': item.cover,
+                                        'code_of_book': item.code_of_book,
+                                        'category': item.category,
+                                    })}} >
                                         <View>
                                             <Image style={styles.cardImageBox} source={item.cover ?? ImgaeBooks} />
                                             <Text style={styles.Title}>{item.name}</Text>
