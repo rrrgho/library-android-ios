@@ -28,9 +28,9 @@ const SET_REMOVE_BOOK = () => {
   
 
 
-{/*export {
+export{
     SET_INITIAL,
     SET_BOOK_DATA,
     SET_SEARCH_BOOK,
     SET_REMOVE_BOOK,
-}*/}
+}

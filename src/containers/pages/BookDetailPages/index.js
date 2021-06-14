@@ -72,7 +72,8 @@ const BookDetailPages = ({route,navigation},props) => {
                     }
                     {
                         book && book.data.stock > 0 &&
-                            <MainButton
+                        
+                        <MainButton
                             onPress={() => {OrderBook()}}
                             containerStyle={{
                                 width: responsiveWidth(60),
@@ -86,14 +87,15 @@ const BookDetailPages = ({route,navigation},props) => {
                         />
                         
                     }
-
-                    <View>
+{
+    book && book.data.stock > 0 &&
+    <View style={styles.qrCode}>
                     <QRCode
                         // ref={myQRCode}
                         //QR code value
-                        value={"asas"}
+                        value={'sasa'}
                         //size of QR Code
-                        size={250}
+                        size={150}
                         //Color of the QR Code (Optional)
                         color="black"
                         //Background Color of the QR Code (Optional)
@@ -108,6 +110,8 @@ const BookDetailPages = ({route,navigation},props) => {
                         logoBackgroundColor="yellow"
                         />
                     </View>
+}
+                    
             </ScrollView>
         </View>
         </>
@@ -150,6 +154,11 @@ const styles = StyleSheet.create({
     stockbooks:{
         textAlign: 'center',
         fontSize: responsiveFontSize(2),
+    },
+    qrCode:{
+        marginTop: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
     }
 })
 

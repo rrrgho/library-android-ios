@@ -31,8 +31,8 @@ const Books = (props) => {
     const navigation = useNavigation()
     const getDataBooks = async () =>{
         let send = await GETAUTH(`/book-data?page=${props.booksData.page}`);
-        // let result = send.data.data
-        console.log(send)
+        let result = send.data.data
+        // console.log(send)
         let array = books ?? []
         result.data.map(item =>{
             array.push(item) 
@@ -43,7 +43,6 @@ const Books = (props) => {
             page : props.booksData.page + 1
         }
         props.updateBook(dataBookState)
-        // await GETAUTH(``)
     }
     const searchBook = async () => {
         if(!inSearch){
@@ -91,7 +90,7 @@ const Books = (props) => {
             }
         }
     }
-    const removeSearchBook = () => {
+    const removeSearchBook =  () => {
         props.updateRemoveSearch()
         setInSearch(false)
         setTimeout(() => {
@@ -103,17 +102,13 @@ const Books = (props) => {
         if(props.booksData.page == 1){
             getDataBooks()
         }
-        getDetailBook()
     },[])
-    const getDetailBook = (book_id) =>{
-        navigation.push(`/book-detail/${book_id}`)
-    }
     return (
         <View style={styles.container}>
             <Wrapper>
                 <ScrollView style={{marginTop:10}}>
-                        {/* <Text style={styles.searchbooks}>Cari Buku</Text>
-                        <Text style={styles.judulone}>Temukan buku yang kamu cari dengan mengetik judul buku !</Text> */}
+                        <Text style={styles.searchbooks}>Cari Buku</Text>
+                        <Text style={styles.judulone}>Temukan buku yang kamu cari dengan mengetik judul buku !</Text>
                         <View style={styles.containerSearching}>
                             <TextInput style={styles.inputbooks} placeholder="Cari buku berdasarkan judul buku" onChangeText={(value) => {setBookSearchInput(value)}}></TextInput>
                             <SearchButton onPress={() => {searchBook()}} containerStyle={{
@@ -228,11 +223,11 @@ const styles = StyleSheet.create({
     searchbooks:{
         textAlign:'center',
         fontWeight: '600',
-        fontSize: responsiveFontSize(2.5),
+        fontSize: responsiveFontSize(3.2),
     },
     judulone:{
         textAlign: 'center',
-        fontSize: responsiveFontSize(1.2),
+        fontSize: responsiveFontSize(1.6),
         fontWeight: '600',
         marginTop: 8,
     },
