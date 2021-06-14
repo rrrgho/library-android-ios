@@ -16,7 +16,6 @@ const Router = () => {
                 <Stack.Screen name="HomePage" component={HomePage} />
                 <Stack.Screen name="ProfilePage" component={ProfilePage} />
                 <Stack.Screen name="BooksPage" component={BooksPage} />
-                <Stack.Screen name="ProfilePage" component={ProfilePage} />
                 <Stack.Screen name="HistoryPage" component={HistoryPage} />
                 <Stack.Screen name="BookDetailPages" component={BookDetailPages} />
 

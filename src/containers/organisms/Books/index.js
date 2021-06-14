@@ -1,5 +1,4 @@
 import React, { useEffect,useState } from 'react'
-import { StyleSheet, Text, TextInput, View,Image, Button,ScrollView, Item,FlatList } from 'react-native'
 import SearchButton from '../../../components/atoms/SearchButton'   
 import {
   responsiveHeight,
@@ -15,18 +14,11 @@ import { connect } from 'react-redux';
 import { faSearch, faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { useNavigation } from '@react-navigation/native'
-import React, { useEffect, useState } from 'react'
 import { Image, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import { responsiveFontSize, responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions'
-import { connect } from 'react-redux'
 import ImgaeBooks from '../../../assets/images/notfoundbook.jpg'
-import LoadMore from '../../../components/atoms/LoadMore'
 import HeaderHome from '../../../components/atoms/moleculs/HeaderHome'
-import RemoveBooks from '../../../components/atoms/RemoveBooks'
-import SearchButton from '../../../components/atoms/SearchButton'
 import Wrapper from '../../../components/atoms/Wrapper'
-import { GETAUTH, POSTAUTH } from '../../../config/Axios'
 import { SET_BOOK_DATA, SET_REMOVE_BOOK, SET_SEARCH_BOOK } from '../../../config/Redux/action'
 import { colorBlur, colorDark, colorPrimary } from '../../utils/color'
 const Books = (props) => {
@@ -263,6 +255,11 @@ const styles = StyleSheet.create({
         height: 100,
     }
 })
+
+
+// Kalo mau set redux pakai API, harus pakai redux thunk
+
+
 const mapStateToProps = (state) => {
     return {
         booksData : state.bookReducer
