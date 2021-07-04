@@ -60,6 +60,9 @@ const HomePage = ({navigation, style, ...props}) => {
                     :
                     <Text>Loading ...</Text>
                 }
+            <Text>Hi</Text>
+            <TouchableOpacity style={{backgroundColor:"red"}}>
+                </TouchableOpacity>    
             </ScrollView>  
 
             <TouchableOpacity onPress={() => {check()}}>

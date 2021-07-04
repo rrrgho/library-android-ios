@@ -2,7 +2,7 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import LinearGradient from 'react-native-linear-gradient';
 import { Text, StyleSheet, View } from 'react-native';
-import { faBook, faBarcode, faUserShield } from '@fortawesome/free-solid-svg-icons';
+import { faBook, faHistory, faUserShield } from '@fortawesome/free-solid-svg-icons';
 import theme1 from '../../atoms/ColorPrimary';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
@@ -17,11 +17,11 @@ const NavigationReport = ({Profile},props) => {
                 </LinearGradient>
                 <Text style={styles.iconText}>Buku</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.boxNav}>
+            <TouchableOpacity onPress={() => {navigation.navigate('HistoryPage')}} style={styles.boxNav}>
             <LinearGradient colors={[theme1.primaryGradient1, theme1.primaryGradient2]} style={styles.iconBox}>
-                    <FontAwesomeIcon style={{color:'#fff'}} size={25} icon={ faBarcode }/>
+                    <FontAwesomeIcon style={{color:'#fff'}} size={25} icon={ faHistory }/>
                 </LinearGradient>
-                <Text style={styles.iconText}>Barcode</Text>
+                <Text style={styles.iconText}>History</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {navigation.navigate('ProfilePage')}} style={styles.boxNav}>
             <LinearGradient colors={[theme1.primaryGradient1, theme1.primaryGradient2]} style={styles.iconBox}>
