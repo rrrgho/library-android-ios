@@ -1,37 +1,71 @@
-import React, {useEffect} from 'react'
-import {StyleSheet, View, ScrollView, Dimensions, Button} from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { TouchableOpacity } from 'react-native';
+import { Button, Dimensions, ScrollView, View, Text } from 'react-native'
+import { SliderBox } from "react-native-image-slider-box"
 import NavigationReport from '../../../components/moleculs/NavigationReport'
-import HeaderHome from '../../../components/moleculs/HeaderHome'
-import Slider from '../../../components/moleculs/Slider'
-//import {vText, StyleSheet, Button, View} from 'react-native'
-import { Auth } from '../../../config/Auth'
-import { AsyncStorage } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-{/*const HomePage = () => {
-    const navigation = useNavigation();
-    useEffect(() => {
-        navigation.addListener('beforeRemove', (e) => {
-            e.preventDefault();
-        })
-        // AsyncStorage.clear()
-    },[])*/}
-
+import { GET } from '../../../config/Axios';
 
 const {width} = Dimensions.get("window");
 const {height} = width *100 / 60;
 
 const HomePage = ({navigation, style, ...props}) => {
+    const [images, setImages] = useState([])
+    useEffect(() => {
+        navigation.addListener('beforeRemove', (e) => {
+            e.preventDefault();
+        })
+    },[])
+
+    const getData = async () => {
+        let request = await GET('/slide-banner')
+        var result = ""
+        if(request.status === 200){
+            result = request.data.data
+        }else{
+            console.log("Internet putus, server tidak respons !")
+        }
+        
+        if(result.length > 0){
+            result.map((item) => {
+                setImages([...images, item.images])
+            })
+        }
+    }   
+    
+    
+    useEffect( () => {
+        getData()
+    }, [])
+ 
+
+
+
+
+
+    // This is image Datas
     return (
-        <View>
-            <HeaderHome/>
+        <>
+        <View style={{flex:1}}>
             <ScrollView>
-                <Slider/>
-                <Slider/>
-                </ScrollView>                
-            <NavigationReport/>
-            <Button title="Books Page" onPress={() => {navigation.navigate("BooksPage")}}/>
+                {images.length > 0 ?
+                    <SliderBox
+                        images={images}
+                    />
+                    :
+                    <Text>Loading ...</Text>
+                }
+            </ScrollView>  
+
+            <TouchableOpacity onPress={() => {getData()}}>
+                <Text>Click</Text> 
+            </TouchableOpacity> 
+
         </View>
+        <View style={{height:100}}>
+            <NavigationReport/>
+        </View>
+        </>
+
     )
 }
             

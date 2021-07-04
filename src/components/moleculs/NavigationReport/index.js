@@ -15,7 +15,7 @@ const NavigationReport = ({Profile},props) => {
             <LinearGradient colors={[theme1.primaryGradient1, theme1.primaryGradient2]} style={styles.iconBox}>
                     <FontAwesomeIcon style={{color:'#fff'}} size={25} icon={ faBook }/>
                 </LinearGradient>
-                <Text style={styles.iconText}>Pencarian Buku</Text>
+                <Text style={styles.iconText}>Buku</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.boxNav}>
             <LinearGradient colors={[theme1.primaryGradient1, theme1.primaryGradient2]} style={styles.iconBox}>
@@ -27,7 +27,7 @@ const NavigationReport = ({Profile},props) => {
             <LinearGradient colors={[theme1.primaryGradient1, theme1.primaryGradient2]} style={styles.iconBox}>
                     <FontAwesomeIcon style={{color:'#fff'}} size={25} icon={ faUserShield }/>
                 </LinearGradient>
-                <Text style={styles.iconText}>Profile Setting</Text>
+                <Text style={styles.iconText}>Profile</Text>
             </TouchableOpacity>
         </View>
     )
@@ -37,13 +37,8 @@ const styles = StyleSheet.create({
     container:{
         width:'100%',
         height: 90,
-        marginTop:15,
         backgroundColor:'#fff',
-        position:'absolute',
         borderRadius:100,
-        top:463,
-        left:0,
-        bottom:-120,
         borderWidth:1,
         borderColor:'#ddd',
         shadowColor: '#000',
@@ -51,6 +46,7 @@ const styles = StyleSheet.create({
         shadowOpacity:  0.1,
         shadowRadius: 3,
         elevation: 2,
+        marginTop:-15,
         flexDirection:'row',
         justifyContent:'space-around',
     },
@@ -58,7 +54,7 @@ const styles = StyleSheet.create({
         width:100,
         height:undefined,
         backgroundColor:'#fff',
-        marginTop:15,
+        marginTop:8,
         alignItems:'center',
         justifyContent:'center',
     },

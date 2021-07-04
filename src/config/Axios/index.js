@@ -5,7 +5,7 @@ import { AsyncStorage } from 'react-native';
 const access_token = async () => {
     let token = await AsyncStorage.getItem('access_token')
     return `Bearer ${token}`
-}
+} 
 
 const POST = async (endpoint,data) => {
     let result = false
@@ -25,7 +25,7 @@ const GET = async (endpoint) => {
         result = response
     })
     .catch((error) => {
-        result = error.response.status
+        result = error.response
     })
     return result
 }
