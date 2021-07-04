@@ -25,11 +25,13 @@ const HomePage = ({navigation, style, ...props}) => {
             console.log("Internet putus, server tidak respons !")
         }
         
+        const dataBanner = []
         if(result.length > 0){
             result.map((item) => {
-                setImages([...images, item.images])
+                dataBanner.push(item.images)
             })
         }
+        setImages(dataBanner)
     }   
     
     
@@ -37,6 +39,10 @@ const HomePage = ({navigation, style, ...props}) => {
         getData()
     }, [])
  
+
+    const check = () => {
+        console.log(images)
+    }
 
 
 
@@ -56,12 +62,12 @@ const HomePage = ({navigation, style, ...props}) => {
                 }
             </ScrollView>  
 
-            <TouchableOpacity onPress={() => {getData()}}>
-                <Text>Click</Text> 
+            <TouchableOpacity onPress={() => {check()}}>
+                <Text>Click dong</Text> 
             </TouchableOpacity> 
 
         </View>
-        <View style={{height:100}}>
+        <View style={{height:100, padding:20, marginTop:-10}}>
             <NavigationReport/>
         </View>
         </>
