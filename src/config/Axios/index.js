@@ -37,7 +37,7 @@ const POSTAUTH = async (endpoint,data) => {
         result = response
     })
     .catch((error) => {
-        result = error.response.status
+        result = error.response
     })
     return result
 }

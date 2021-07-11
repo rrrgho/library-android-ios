@@ -102,36 +102,37 @@ const Books = (props) => {
         if(props.booksData.page == 1){
             getDataBooks()
         }
+        console.log(props.booksData.books)
     },[])
     return (
         <View style={styles.container}>
             <Wrapper>
+                <View>
+                    <View style={styles.containerSearching}>
+                        <TextInput style={styles.inputbooks} placeholder="Cari buku berdasarkan judul buku" onChangeText={(value) => {setBookSearchInput(value)}}></TextInput>
+                        <SearchButton onPress={() => {searchBook()}} containerStyle={{
+                            width: responsiveWidth(15),
+                            marginLeft:5,
+                            height: responsiveHeight(7),
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            alignSelf: 'center',
+                            borderRadius: 10,
+                            marginTop: responsiveHeight(0),
+                        }} fade={isProcessing} touchable={!isProcessing ? true : false}  title={!isProcessing ? <FontAwesomeIcon icon={faSearch} style={{color:"#fff"}}/> : <FontAwesomeIcon icon={faSpinner} style={{color:'#fff'}}/>} />
+                    </View>
+                    {
+                        inSearch && <RemoveBooks onPress={() => {removeSearchBook()}} fade={isRemoveBooks} touchable={!isRemoveBooks ? true : false}  />
+                    }
+                </View>
                 <ScrollView style={{marginTop:10}}>
-                        <Text style={styles.searchbooks}>Cari Buku</Text>
-                        <Text style={styles.judulone}>Temukan buku yang kamu cari dengan mengetik judul buku !</Text>
-                        <View style={styles.containerSearching}>
-                            <TextInput style={styles.inputbooks} placeholder="Cari buku berdasarkan judul buku" onChangeText={(value) => {setBookSearchInput(value)}}></TextInput>
-                            <SearchButton onPress={() => {searchBook()}} containerStyle={{
-                                width: responsiveWidth(15),
-                                marginLeft:5,
-                                height: responsiveHeight(7),
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                alignSelf: 'center',
-                                borderRadius: 10,
-                                marginTop: responsiveHeight(0),
-                            }} fade={isProcessing} touchable={!isProcessing ? true : false}  title={!isProcessing ? <FontAwesomeIcon icon={faSearch} style={{color:"#fff"}}/> : <FontAwesomeIcon icon={faSpinner} style={{color:'#fff'}}/>} />
-                        </View>
-                        {
-                            inSearch && <RemoveBooks onPress={() => {removeSearchBook()}} fade={isRemoveBooks} touchable={!isRemoveBooks ? true : false}  />
-                        }
                         <View style={styles.container} >
                         {
                             !props.booksData.books ? 
                             <Text>Loading!!</Text> :
                             props.booksData.books.map((item, i) => {
                                 return(
-                                    <View style={{backgroundColor:'#fff', paddingBottom:10, borderColor:colorBlur, borderRadius:10, borderRadius:10, marginTop:10, borderWidth:2}} key={i}>
+                                    <View style={{backgroundColor:'#fff', width:190, paddingBottom:10, borderColor:colorBlur, borderRadius:10, borderRadius:10, marginTop:10, borderWidth:2}} key={i}>
                                         <TouchableOpacity onPress={() => {navigation.navigate('BookDetailPages',{
                                             'id': item.id,
                                             'description': item.description,
@@ -143,12 +144,9 @@ const Books = (props) => {
                                                 <Image style={styles.cardImageBox} source={item.cover ?? ImgaeBooks} />
                                                 <Wrapper style={{paddingTop:10,}}>
                                                     <Text style={styles.Title}>{item.name}</Text>
-                                                    <Text style={styles.TextContent}>{item.description ?? 'Tidak ada deskripsi buku'}</Text>
-                                                    <Text style={styles.TextContent}>Creator: {item.creator}</Text>
-                                                    <Text style={styles.TextContent}>Kode: {item.code_of_book}</Text>
                                                     {
-                                                        item.ready ? <Text style={styles.TextContent}>Tersedia</Text> :
-                                                        <Text style={styles.TextContent}>Tidak Tersedia</Text>
+                                                        item.ready ? <View style={{width:70, alignItems:'center', borderRadius:5, height:30, backgroundColor:'green', justifyContent:'center', marginTop:10}}><Text style={styles.TextContent, {color:'#fff'}}>Tersedia</Text></View> :
+                                                        <View style={{width:120, alignItems:'center', borderRadius:5, height:30, backgroundColor:'red', justifyContent:'center', marginTop:10}}><Text style={styles.TextContent, {color:'#fff'}}>Tidak Tersedia</Text></View>
                                                     }
                                                 </Wrapper>
                                             </View>
@@ -157,9 +155,11 @@ const Books = (props) => {
                                 )
                             })
                         }
-                        {
-                            !inSearch && <LoadMore onPress={() => {getDataBooks()}} fade={isLoadMore} touchable={!isLoadMore ? true : false}  />
-                        }
+                        </View>
+                        <View>
+                            {
+                                !inSearch && <LoadMore onPress={() => {getDataBooks()}} fade={isLoadMore} touchable={!isLoadMore ? true : false}  />
+                            }
                         </View>
                     
                 
@@ -218,6 +218,9 @@ const styles = StyleSheet.create({
         flex:1,
         backgroundColor:'#fff',
         justifyContent: 'center',
+        flexDirection:'row',
+        flexWrap:'wrap',
+        justifyContent:'space-between',
 
     },
     searchbooks:{

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import {Text,View, StyleSheet, TouchableOpacity} from 'react-native'
 import Wrapper from '../../../components/atoms/Wrapper'
-import BookHistory from '../../organisms/BookHistory'
+import BookHistoryOngoing from '../../organisms/BookHistoryOngoing'
 import {colorBlur, colorDark, colorPrimary} from '../../utils/color'
 import Header from '../../../components/moleculs/Header'
 
@@ -10,13 +10,13 @@ const HistoryPage = () => {
     const componentWillBeRendered = () => {
         switch(activeMenu){
             case "ORDER ONGOING":
-                return <BookHistory />
+                return <BookHistoryOngoing />
             case "ORDER FINISHED":
-                return <BookHistory />
+                return <BookHistoryOngoing />
             case "ORDER HISTORY":
-                return <BookHistory />
+                return <BookHistoryOngoing />
             default:
-                return <BookHistory />
+                return <BookHistoryOngoing />
         }
     }
     return (
