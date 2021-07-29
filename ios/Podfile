@@ -16,6 +16,8 @@ target 'perpus_yp_sim' do
 
   pod 'RNSweetAlert', :path => '../node_modules/react-native-sweet-alert'
 
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
   target 'perpus_yp_simTests' do
     inherit! :complete
     # Pods for testing

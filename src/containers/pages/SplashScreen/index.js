@@ -9,11 +9,11 @@ const SplashScreen = ({navigation}) => {
     useEffect(async () => {
         if(await Auth()){
             setTimeout(() => {
-                navigation.navigate("LoginPage")
+                navigation.navigate("HomePage")
             },2000)
         }else{
             setTimeout(() => {
-                navigation.navigate("HomePage")
+                navigation.navigate("LoginPage")
             },2000)
         }
     },[])

@@ -9,10 +9,15 @@ const bookState = {
 }
 const bookReducer = (state = bookState, action) => {
     if(action.type === ActionType.SET_BOOK){
-        let array = state.books ?? []
-        action.inputValue.data.map(item => {
-            array.push(item)
-        })
+        let array = []
+        if(!action.inputValue.refresh){
+            array = state.books ?? []
+            action.inputValue.data.map(item => {
+                array.push(item)
+            })
+        }else{
+            array = action.inputValue.data
+        }
         return{
             ...state,
             books: array,

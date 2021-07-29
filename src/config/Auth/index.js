@@ -5,4 +5,9 @@ const Auth = async () => {
     return isAuth
 }
 
-export {Auth}
+const Identity = async () => {
+    let identity = await AsyncStorage.getItem('identity')
+    return identity
+}
+
+export {Auth, Identity}

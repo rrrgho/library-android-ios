@@ -29,10 +29,10 @@ const BookDetailPages = ({route,navigation},props) => {
         let send = await POSTAUTH('/order', data)
         if(send.data.error === false)
         {
-            Alert.alert('Good Job', send.data.message, 'success')
-            // setTimeout(() => {
-            //     navigation.navigate('BooksPage')
-            // }, 1000)
+            alert("Berhasil meminjam buku")
+            setTimeout(() => {
+                navigation.navigate('HistoryPage')
+            },2000)
         }else{
             Alert.alert('Gagal Bro',send.data.message)
         }

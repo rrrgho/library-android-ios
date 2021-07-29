@@ -10,13 +10,13 @@ const MainButton = (props) => {
         if(props.touchable){
             return (
                 <TouchableOpacity onPress={props.onPress} style={[styles.container, {backgroundColor:props.fade ? GreenFade : background}, props.containerStyle]}>
-                    <Text style={{color:'#fff'}}>{props.title ?? 'Title'}</Text>
+                    <Text style={[{color:'#fff'}, props.textStyle]}>{props.title ?? 'Title'}</Text>
                 </TouchableOpacity>
             )
         }else{
             return (
                 <View style={[styles.container, {backgroundColor:props.fade ? GreenFade : background}, props.containerStyle]}>
-                    <Text style={{color:'#fff'}}>{props.title ?? 'Title'}</Text>
+                    <Text style={[{color:'#fff'}, props.textStyle]}>{props.title ?? 'Title'}</Text>
                 </View>
             )
         }

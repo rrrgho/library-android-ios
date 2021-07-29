@@ -34,7 +34,7 @@ const LoginPage = ({navigation}) => {
 const styles = StyleSheet.create({
     loginContainer: {
         flex:1,
-        backgroundColor:'#fff'
+        backgroundColor:'#fff',
     },
     loginFooter:{
         height:60,

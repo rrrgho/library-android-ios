@@ -14,13 +14,17 @@ import { connect } from 'react-redux';
 import { faSearch, faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { useNavigation } from '@react-navigation/native'
-import { Image, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Image, RefreshControl, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import ImgaeBooks from '../../../assets/images/notfoundbook.jpg'
 import HeaderHome from '../../../components/atoms/moleculs/HeaderHome'
 import Wrapper from '../../../components/atoms/Wrapper'
 import { SET_BOOK_DATA, SET_REMOVE_BOOK, SET_SEARCH_BOOK } from '../../../config/Redux/action'
 import { colorBlur, colorDark, colorPrimary } from '../../utils/color'
+import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder'
+import LinearGradient from 'react-native-linear-gradient';
+
+const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient)
 const Books = (props) => {
     const [isProcessing,setIsProcessing] = useState(false)
     const [isLoadMore,setIsLoadmore] = useState(false)
@@ -40,10 +44,30 @@ const Books = (props) => {
 
         let dataBookState = {
             data : array,
-            page : props.booksData.page + 1
+            page : props.booksData.page + 1,
+        }
+        props.updateBook(dataBookState)
+        setIsLoadmore(false)
+    }
+
+    const refreshData = async () => {
+        let send = await GETAUTH(`/book-data?page=1`);
+        let result = send.data.data
+        // console.log(send)
+        let array = books ?? []
+        result.data.map(item =>{
+            array.push(item) 
+        })
+
+        let dataBookState = {
+            data : array,
+            page : props.booksData.page + 1,
+            refresh : true
         }
         props.updateBook(dataBookState)
     }
+
+
     const searchBook = async () => {
         if(!inSearch){
             if(bookSearchInput.length > 0){
@@ -99,11 +123,46 @@ const Books = (props) => {
         },500)
     }
     useEffect(() => {
-        if(props.booksData.page == 1){
-            getDataBooks()
-        }
-        console.log(props.booksData.books)
+        refreshData()
+        // if(props.booksData.page == 1){
+        //     getDataBooks()
+        // }
+        // console.log(props.booksData.books)
     },[])
+
+
+    const shimmer = () => {
+        let render = new Array(6).fill(0).map((item,index) => {
+            return (
+                <View key={index} style={{backgroundColor:'#fff', width:190, paddingBottom:10, borderColor:colorBlur, borderRadius:10, borderRadius:10, marginTop:10, borderWidth:2}}>
+                    <TouchableOpacity >
+                        <View>
+                            <ShimmerPlaceHolder style={{height:200}} />
+                            <Wrapper style={{paddingTop:10,}}>
+                                <ShimmerPlaceHolder />
+                                <ShimmerPlaceHolder />
+                            </Wrapper>
+                        </View>
+                    </TouchableOpacity>
+                </View> 
+            )
+        })
+
+        return render
+    }
+
+
+    const [refreshing, setRefreshing] = useState(false);
+
+    const wait = (timeout) => {
+        return new Promise(resolve => setTimeout(resolve, timeout));
+    }
+
+    const onRefresh = React.useCallback(async () => {
+        setRefreshing(true);
+        await refreshData()
+        wait(2000).then(() => setRefreshing(false));
+    }, []);
     return (
         <View style={styles.container}>
             <Wrapper>
@@ -125,11 +184,21 @@ const Books = (props) => {
                         inSearch && <RemoveBooks onPress={() => {removeSearchBook()}} fade={isRemoveBooks} touchable={!isRemoveBooks ? true : false}  />
                     }
                 </View>
-                <ScrollView style={{marginTop:10}}>
+                <ScrollView style={{marginTop:10}}
+                
+                refreshControl={
+                    <RefreshControl
+                      refreshing={refreshing}
+                      onRefresh={onRefresh}
+                    />
+                  }
+                >
                         <View style={styles.container} >
+                        
                         {
+                            !refreshing ?
                             !props.booksData.books ? 
-                            <Text>Loading!!</Text> :
+                            shimmer() :
                             props.booksData.books.map((item, i) => {
                                 return(
                                     <View style={{backgroundColor:'#fff', width:190, paddingBottom:10, borderColor:colorBlur, borderRadius:10, borderRadius:10, marginTop:10, borderWidth:2}} key={i}>
@@ -154,11 +223,19 @@ const Books = (props) => {
                                     </View>  
                                 )
                             })
+                            :
+                            shimmer()
                         }
                         </View>
-                        <View>
+
+                        {isLoadMore &&
+                            <View style={styles.container} >
+                                {shimmer()}
+                            </View>
+                        }
+                        <View style={{paddingBottom:20, paddingTop:20}}>
                             {
-                                !inSearch && <LoadMore onPress={() => {getDataBooks()}} fade={isLoadMore} touchable={!isLoadMore ? true : false}  />
+                                !inSearch && <LoadMore onPress={() => {getDataBooks(); setIsLoadmore(true)}} fade={isLoadMore} touchable={!isLoadMore ? true : false}  />
                             }
                         </View>
                     
@@ -191,6 +268,7 @@ const styles = StyleSheet.create({
         height:200,
         borderTopLeftRadius:10,
         borderTopRightRadius:10,
+        
     },
     cardTitleBox:{
         width:'100%',

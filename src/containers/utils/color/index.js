@@ -1,4 +1,4 @@
-const colorPrimary = "#1B9911"
+const colorPrimary = "#37db63"
 const colorDark = "#7d848a"
 const colorBlur = "#eee"
 const GreenFade = '#81ed79'

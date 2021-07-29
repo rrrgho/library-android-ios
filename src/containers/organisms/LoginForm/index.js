@@ -28,11 +28,14 @@ const LoginForm = (props) => {
                 await AsyncStorage.setItem('access_token',response.token)
                 setIsProcessing(false)
                 navigation.navigate("HomePage")
+            }else{
+                alert("sas")
             }
         }else{
             setIsProcessing(false)
             alert("Data tidak boleh kosong !")
         }
+        alert("as")
 
     }
 
@@ -60,7 +63,7 @@ const styles = StyleSheet.create({
         flex:1,
         backgroundColor:'#fff',
         justifyContent:'center',
-        alignItems:'center'
+        alignItems:'center',
     },
     logo:{
         width:150,
@@ -79,7 +82,8 @@ const styles = StyleSheet.create({
         fontWeight:'bold',
     },
     inputBox:{
-        height:500
+        height:400,
+        backgroundColor:'#fff'
     },
 })
 
