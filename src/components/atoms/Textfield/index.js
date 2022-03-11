@@ -3,11 +3,11 @@ import { StyleSheet, TextInput, View } from 'react-native'
 import { colorBlur, colorDark, colorPrimary } from '../../../containers/utils/color'
 
 const Textfield = (props) => {
-    const {style,placeholder,password} = props
+    const {style,placeholder,password, value} = props
     return (
         <View style={[styles.container,style]}>
             <View style={styles.textInputBox}>
-                <TextInput secureTextEntry={password ?? false} onChangeText={props.onChangeText} style={{color:colorDark}} placeholderTextColor={colorDark} placeholder={placeholder ?? 'Your placeholder'}/>
+                <TextInput value={value} secureTextEntry={password ?? false} onChangeText={props.onChangeText} style={{color:colorDark}} placeholderTextColor={colorDark} placeholder={placeholder ?? 'Your placeholder'}/>
             </View>
             <View style={styles.iconBox}>
 
@@ -20,7 +20,8 @@ const styles = StyleSheet.create({
     container:{
         height: 50,
         backgroundColor: colorBlur,
-        flexDirection:'row'
+        flexDirection:'row',
+        borderRadius:6
     },
     textInputBox:{
         flex:1,

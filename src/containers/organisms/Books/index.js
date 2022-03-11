@@ -11,7 +11,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { AsyncStorage } from 'react-native';
 import { GETAUTH,POSTAUTH } from '../../../config/Axios'
 import { connect } from 'react-redux';
-import { faSearch, faSpinner } from '@fortawesome/free-solid-svg-icons'
+import { faCheck, faSearch, faSpinner, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { useNavigation } from '@react-navigation/native'
 import { Image, RefreshControl, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
@@ -19,10 +19,15 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import ImgaeBooks from '../../../assets/images/notfoundbook.jpg'
 import HeaderHome from '../../../components/atoms/moleculs/HeaderHome'
 import Wrapper from '../../../components/atoms/Wrapper'
-import { SET_BOOK_DATA, SET_REMOVE_BOOK, SET_SEARCH_BOOK } from '../../../config/Redux/action'
+import { SET_BOOK_DATA, SET_REMOVE_BOOK, SET_SEARCH_BOOK, SET_SEARCH_BOOK_FIRST } from '../../../config/Redux/action'
 import { colorBlur, colorDark, colorPrimary } from '../../utils/color'
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder'
 import LinearGradient from 'react-native-linear-gradient';
+import { set } from 'immer/dist/internal';
+import moment from 'moment'
+import NavigationReport from '../../../components/moleculs/NavigationReport';
+import FloatingCamera from '../FloatingCamera';
+import { useIsFocused } from '@react-navigation/native'
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient)
 const Books = (props) => {
@@ -32,14 +37,16 @@ const Books = (props) => {
     const [books] = useState();
     const [inSearch,setInSearch] = useState(false)
     const [bookSearchInput,setBookSearchInput] = useState(false)
+    const [info,setInfo] = useState(true)
+
     const navigation = useNavigation()
     const getDataBooks = async () =>{
-        let send = await GETAUTH(`/book-data?page=${props.booksData.page}`);
+        let send = await GETAUTH(`/get-bypreference?page=${props.booksData.page}`);
         let result = send.data.data
-        // console.log(send)
         let array = books ?? []
-        result.data.map(item =>{
-            array.push(item) 
+        result.map(item =>{
+            array.push(item)
+            console.log(item) 
         })
 
         let dataBookState = {
@@ -48,16 +55,17 @@ const Books = (props) => {
         }
         props.updateBook(dataBookState)
         setIsLoadmore(false)
+        
     }
 
     const refreshData = async () => {
-        let send = await GETAUTH(`/book-data?page=1`);
+        if(inSearch){
+            removeSearchBook()
+        }
+        let send = await GETAUTH(`/get-bypreference?page=1`);
         let result = send.data.data
-        // console.log(send)
-        let array = books ?? []
-        result.data.map(item =>{
-            array.push(item) 
-        })
+        let array = [...result]
+        console.log(array)
 
         let dataBookState = {
             data : array,
@@ -71,12 +79,12 @@ const Books = (props) => {
     const searchBook = async () => {
         if(!inSearch){
             if(bookSearchInput.length > 0){
+                
                 let data = {
                     judul : bookSearchInput
                 }
-                let send = await POSTAUTH(`/search-book`, data);
+                let send = await POSTAUTH(`/search-book?page=1`, data);
                 let result = send.data.data
-                console.log(result)
                 let array = []
                 result.data.map(item => {
                     array.push(item)
@@ -84,66 +92,160 @@ const Books = (props) => {
                 let dataState = {
                     data : array,
                     page : props.booksData.pageSearch + 1
+                    
                 }
-                props.updateBookSearch(dataState)
+                props.updateBookSearchFirst(dataState)
                 setInSearch(bookSearchInput)
             }else{
-                alert('Judul buku tidak boleh kosong')
+                
+                if(props.ocr_search != null){
+                    let data = {
+                        judul : props.ocr_search
+                    }
+                    let send = await POSTAUTH(`/search-book?page=1`, data);
+                    let result = send.data.data
+                    let array = []
+                    result.data.map(item => {
+                        array.push(item)
+                    })
+                    let dataState = {
+                        data : array,
+                        page : props.booksData.pageSearch + 1
+                        
+                    }
+                    props.updateBookSearchFirst(dataState)
+                    setInSearch(props.ocr_search)
+                }else{
+                    
+                }
             }
         }else{
-            removeSearchBook()
             if(bookSearchInput.length > 0){
+                
+                props.updateRemoveSearch()
                 let data = {
                     judul : bookSearchInput
                 }
-                let send = await POSTAUTH(`/search-book`, data);
+                let send = await POSTAUTH(`/search-book?page=1`, data);
                 let result = send.data.data
-                console.log(result)
-                let array = []
-                result.data.map(item => {
-                    array.push(item)
-                })
+                let array = [...result.data]
                 let dataState = {
                     data : array,
                     page : props.booksData.pageSearch + 1
+                    
                 }
-                props.updateBookSearch(dataState)
+                props.updateBookSearchFirst(dataState)
                 setInSearch(bookSearchInput)
             }else{
-                alert('Judul buku tidak boleh kosong')
+                
+                if(props.ocr_search != null){
+                    let data = {
+                        judul : props.ocr_search
+                    }
+                    let send = await POSTAUTH(`/search-book?page=1`, data);
+                    let result = send.data.data
+                    let array = [...result.data]
+                    let dataState = {
+                        data : array,
+                        page : props.booksData.pageSearch + 1
+                        
+                    }
+                    props.updateBookSearchFirst(dataState)
+                    setInSearch(props.ocr_search)
+                }else{
+                    
+                }
             }
         }
     }
+
+
+    
+    const searchBookLoadMore = async () => {
+        console.log(props.booksData.pageSearch)
+        if(bookSearchInput.length > 0){
+            console.log(bookSearchInput)
+            let data = {
+                judul : bookSearchInput
+            }
+            let send = await POSTAUTH(`/search-book?page=${props.booksData.pageSearch}`, data);
+            let result = send.data.data
+            let array = [...result.data]
+            let dataState = {
+                data : array,
+                page : props.booksData.pageSearch + 1
+            }
+            if(array.length > 0)
+                props.updateBookSearch(dataState)
+            setInSearch(bookSearchInput)
+        }else{
+            if(props.ocr_search != null){
+                let data = {
+                    judul : props.ocr_search
+                }
+                let send = await POSTAUTH(`/search-book?page=${props.booksData.pageSearch}`, data);
+                let result = send.data.data
+                let array = [...result.data]
+                let dataState = {
+                    data : array,
+                    page : props.booksData.pageSearch + 1
+                }
+                if(array.length > 0)
+                    props.updateBookSearch(dataState)
+                setInSearch(props.ocr_search)
+            }else{
+
+                
+            }
+        }
+        setIsLoadmore(false)
+    }
+
+
+
     const removeSearchBook =  () => {
         props.updateRemoveSearch()
         setInSearch(false)
-        setTimeout(() => {
-            console.log(props.booksData.books)
-            console.log(props.booksData.booksTmp)
-        },500)
+        setBookSearchInput("")
     }
     useEffect(() => {
-        refreshData()
-        // if(props.booksData.page == 1){
-        //     getDataBooks()
-        // }
-        // console.log(props.booksData.books)
+        if(!props.booksData.books){
+            refreshData()
+            setInfo(true)
+        }
+        
     },[])
 
 
+    const isFocused = useIsFocused()
+    useEffect(() => {
+        if(props.ocr_search != null){
+            setBookSearchInput("")
+            setInSearch(true)
+            searchBook()
+        }
+    },[isFocused])
+
+
     const shimmer = () => {
-        let render = new Array(6).fill(0).map((item,index) => {
+        let render = new Array(12).fill(0).map((item,index) => {
             return (
-                <View key={index} style={{backgroundColor:'#fff', width:190, paddingBottom:10, borderColor:colorBlur, borderRadius:10, borderRadius:10, marginTop:10, borderWidth:2}}>
-                    <TouchableOpacity >
-                        <View>
-                            <ShimmerPlaceHolder style={{height:200}} />
+                <View style={{backgroundColor:'transparent', width:'48%', paddingBottom:10, borderRadius:10, borderRadius:10, marginTop:10, borderWidth:1, borderStyle:'solid', borderColor:'#ccc'}}>
+                    <View >
+                        <View style={{minHeight:responsiveHeight(10)}}>
                             <Wrapper style={{paddingTop:10,}}>
-                                <ShimmerPlaceHolder />
-                                <ShimmerPlaceHolder />
+                                <ShimmerPlaceHolder style={{width:responsiveWidth(33)}} />
+                                <ShimmerPlaceHolder style={{width:responsiveWidth(27), marginTop:5}} />
                             </Wrapper>
                         </View>
-                    </TouchableOpacity>
+                        <View>
+                            <Wrapper>
+                                <View style={{ alignItems:'center', borderRadius:5, marginTop:20, display:'flex', flexDirection:'row'}}>
+                                    <ShimmerPlaceHolder style={{width:responsiveWidth(33), height:responsiveHeight(1)}} />
+                                </View>
+                            </Wrapper>
+                        </View>
+                    </View>
                 </View> 
             )
         })
@@ -165,10 +267,10 @@ const Books = (props) => {
     }, []);
     return (
         <View style={styles.container}>
-            <Wrapper>
+            <Wrapper style={{ width:'100%', height:'100%'}}>
                 <View>
                     <View style={styles.containerSearching}>
-                        <TextInput style={styles.inputbooks} placeholder="Cari buku berdasarkan judul buku" onChangeText={(value) => {setBookSearchInput(value)}}></TextInput>
+                        <TextInput style={[styles.inputbooks, {padding:15, color:'#888'}]} placeholder="Cari buku berdasarkan judul buku" onChangeText={(value) => {setBookSearchInput(value)}} value={bookSearchInput}></TextInput>
                         <SearchButton onPress={() => {searchBook()}} containerStyle={{
                             width: responsiveWidth(15),
                             marginLeft:5,
@@ -181,7 +283,7 @@ const Books = (props) => {
                         }} fade={isProcessing} touchable={!isProcessing ? true : false}  title={!isProcessing ? <FontAwesomeIcon icon={faSearch} style={{color:"#fff"}}/> : <FontAwesomeIcon icon={faSpinner} style={{color:'#fff'}}/>} />
                     </View>
                     {
-                        inSearch && <RemoveBooks onPress={() => {removeSearchBook()}} fade={isRemoveBooks} touchable={!isRemoveBooks ? true : false}  />
+                        inSearch && <RemoveBooks result={bookSearchInput.length > 0 ? bookSearchInput : props.ocr_search} onPress={() => {removeSearchBook()}} fade={isRemoveBooks} touchable={!isRemoveBooks ? true : false}  />
                     }
                 </View>
                 <ScrollView style={{marginTop:10}}
@@ -193,40 +295,100 @@ const Books = (props) => {
                     />
                   }
                 >
-                        <View style={styles.container} >
-                        
                         {
-                            !refreshing ?
-                            !props.booksData.books ? 
-                            shimmer() :
-                            props.booksData.books.map((item, i) => {
-                                return(
-                                    <View style={{backgroundColor:'#fff', width:190, paddingBottom:10, borderColor:colorBlur, borderRadius:10, borderRadius:10, marginTop:10, borderWidth:2}} key={i}>
-                                        <TouchableOpacity onPress={() => {navigation.navigate('BookDetailPages',{
-                                            'id': item.id,
-                                            'description': item.description,
-                                            'cover': item.cover,
-                                            'code_of_book': item.code_of_book,
-                                            'category': item.category,
-                                        })}} >
-                                            <View>
-                                                <Image style={styles.cardImageBox} source={item.cover ?? ImgaeBooks} />
-                                                <Wrapper style={{paddingTop:10,}}>
-                                                    <Text style={styles.Title}>{item.name}</Text>
-                                                    {
-                                                        item.ready ? <View style={{width:70, alignItems:'center', borderRadius:5, height:30, backgroundColor:'green', justifyContent:'center', marginTop:10}}><Text style={styles.TextContent, {color:'#fff'}}>Tersedia</Text></View> :
-                                                        <View style={{width:120, alignItems:'center', borderRadius:5, height:30, backgroundColor:'red', justifyContent:'center', marginTop:10}}><Text style={styles.TextContent, {color:'#fff'}}>Tidak Tersedia</Text></View>
-                                                    }
-                                                </Wrapper>
-                                            </View>
-                                        </TouchableOpacity>
-                                    </View>  
-                                )
-                            })
-                            :
-                            shimmer()
+                            !inSearch ?
+                                <View style={styles.container} >
+                                    
+                                    {
+                                        !refreshing ?
+                                        !props.booksData.books ? 
+                                        shimmer() :
+                                        props.booksData.books.map((item, i) => {
+                                            var rand = 'rgb(' + (Math.floor((256 - 199) * Math.random()) + 200) + ',' + (Math.floor((256 - 199) * Math.random()) + 200) + ',' + (Math.floor((256 - 199) * Math.random()) + 200) + ')';
+                                            return(
+                                                <View style={{backgroundColor:rand, width:'48%', paddingBottom:10, borderRadius:10, borderRadius:10, marginTop:10,}} key={i}>
+                                                    <TouchableOpacity onPress={() => {navigation.navigate('BookDetailPages',{
+                                                        'id': item.id
+                                                    })}} >
+                                                        <View style={{minHeight:responsiveHeight(10)}}>
+                                                            {/* <Image style={styles.cardImageBox} source={ item.cover ? {uri:`${item.cover}`} : ImgaeBooks} /> */}
+                                                            <Wrapper style={{paddingTop:10,}}>
+                                                                <Text style={styles.Title}>{item.name}</Text>
+                                                                {/* <Text style={styles.Title}>{item.name.split(" ")[0]} {item.name.split(" ")[1]}  {item.name.split(" ")[2]} {item.name.split(" ").length > 3 && "..."}</Text> */}
+                                                                <Text style={{color:'#999', fontSize:responsiveFontSize(1.2)}}>{moment(item.created_at, "YYYYMMDD").fromNow()}</Text>
+                                                            </Wrapper>
+                                                        </View>
+                                                        <View>
+                                                            <Wrapper>
+                                                            {
+                                                                item.ready ?
+                                                                <View style={{ alignItems:'center', borderRadius:5, marginTop:20, display:'flex', flexDirection:'row'}}>
+                                                                    <FontAwesomeIcon icon={faCheck} style={{color:'green'}} />
+                                                                    <Text style={styles.TextContent, {color:'#888', marginLeft:5}}>Tersedia</Text>
+                                                                </View>
+                                                                :
+                                                                <View style={{ alignItems:'center', borderRadius:5, marginTop:20, display:'flex', flexDirection:'row'}}>
+                                                                    <FontAwesomeIcon icon={faTimes} style={{color:'red'}} />
+                                                                    <Text style={styles.TextContent, {color:'#888', marginLeft:5}}>Tidak Tersedia</Text>
+                                                                </View>
+                                                            }
+                                                            </Wrapper>
+                                                        </View>
+                                                    </TouchableOpacity>
+                                                </View>  
+                                            )
+                                        })
+                                        :
+                                        shimmer()
+                                    }
+                                    </View>
+                                :
+                                    <View style={styles.container} >
+                            
+                                        {
+                                            !refreshing ?
+                                            !props.booksData.booksSearch ? 
+                                            shimmer() :
+                                            props.booksData.booksSearch.map((item, i) => {
+                                                var rand = 'rgb(' + (Math.floor((256 - 199) * Math.random()) + 200) + ',' + (Math.floor((256 - 199) * Math.random()) + 200) + ',' + (Math.floor((256 - 199) * Math.random()) + 200) + ')';
+                                                return(
+                                                    <View style={{backgroundColor:rand, width:'48%', paddingBottom:10, borderRadius:10, borderRadius:10, marginTop:10,}} key={i}>
+                                                        <TouchableOpacity onPress={() => {navigation.navigate('BookDetailPages',{
+                                                            'id': item.id
+                                                        })}} >
+                                                            <View style={{minHeight:responsiveHeight(10)}}>
+                                                                {/* <Image style={styles.cardImageBox} source={ item.cover ? {uri:`${item.cover}`} : ImgaeBooks} /> */}
+                                                                <Wrapper style={{paddingTop:10,}}>
+                                                                    <Text style={styles.Title}>{item.name}</Text>
+                                                                    {/* <Text style={styles.Title}>{item.name.split(" ")[0]} {item.name.split(" ")[1]}  {item.name.split(" ")[2]} {item.name.split(" ").length > 3 && "..."}</Text> */}
+                                                                    <Text style={{color:'#999', fontSize:responsiveFontSize(1.2)}}>{moment(item.created_at, "YYYYMMDD").fromNow()}</Text>
+                                                                </Wrapper>
+                                                            </View>
+                                                            <View>
+                                                                <Wrapper>
+                                                                {
+                                                                    item.ready ?
+                                                                    <View style={{ alignItems:'center', borderRadius:5, marginTop:20, display:'flex', flexDirection:'row'}}>
+                                                                        <FontAwesomeIcon icon={faCheck} style={{color:'green'}} />
+                                                                        <Text style={styles.TextContent, {color:'#888', marginLeft:5}}>Tersedia</Text>
+                                                                    </View>
+                                                                    :
+                                                                    <View style={{ alignItems:'center', borderRadius:5, marginTop:20, display:'flex', flexDirection:'row'}}>
+                                                                        <FontAwesomeIcon icon={faTimes} style={{color:'red'}} />
+                                                                        <Text style={styles.TextContent, {color:'#888', marginLeft:5}}>Tidak Tersedia</Text>
+                                                                    </View>
+                                                                }
+                                                                </Wrapper>
+                                                            </View>
+                                                        </TouchableOpacity>
+                                                    </View>  
+                                                )
+                                            })
+                                            :
+                                            shimmer()
+                                        }
+                                        </View>
                         }
-                        </View>
 
                         {isLoadMore &&
                             <View style={styles.container} >
@@ -235,12 +397,14 @@ const Books = (props) => {
                         }
                         <View style={{paddingBottom:20, paddingTop:20}}>
                             {
-                                !inSearch && <LoadMore onPress={() => {getDataBooks(); setIsLoadmore(true)}} fade={isLoadMore} touchable={!isLoadMore ? true : false}  />
+                                !inSearch ? <LoadMore onPress={() => {getDataBooks(); setIsLoadmore(true)}} fade={isLoadMore} touchable={!isLoadMore ? true : false}  />
+                                :<LoadMore onPress={() => {searchBookLoadMore(); setIsLoadmore(true)}} fade={isLoadMore} touchable={!isLoadMore ? true : false}  />
                             }
                         </View>
                     
                 
                 </ScrollView>
+                <FloatingCamera/>
             </Wrapper>
         </View>
     )
@@ -248,7 +412,8 @@ const Books = (props) => {
 }
 const styles = StyleSheet.create({
     containerSearching:{
-        flexDirection:'row'
+        flexDirection:'row',
+        width:'100%'
     },
     card:{
         width: responsiveWidth(90),
@@ -281,9 +446,10 @@ const styles = StyleSheet.create({
     },
     Title:{
         opacity:0.7,
-        fontSize: responsiveFontSize(2.2),
+        fontSize: responsiveFontSize(1.5),
         fontWeight: 'bold',
-        color: 'black',
+        color: '#666',
+        textTransform:'uppercase'
     },
     TextContent:{
         fontSize: responsiveFontSize(1.5),
@@ -345,6 +511,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         updateBook: (value) => {dispatch(SET_BOOK_DATA(value))},
         updateBookSearch: (value) => {dispatch(SET_SEARCH_BOOK(value))},
+        updateBookSearchFirst: (value) => {dispatch(SET_SEARCH_BOOK_FIRST(value))},
         updateRemoveSearch: () => {dispatch(SET_REMOVE_BOOK())},
     }
 }

@@ -6,6 +6,8 @@ import BookHistoryDone from '../../organisms/BookHistoryDone'
 import BookHistoryOngoing from '../../organisms/BookHistoryOngoing'
 import BookHistoryUnapproved from '../../organisms/BookHistoryUnapproved'
 import { colorPrimary } from '../../utils/color'
+import MainMenu from '../../organisms/MainMenu';
+import NavigationReport from '../../../components/moleculs/NavigationReport'
 
 const HistoryPage = () => {
     const [activeMenu,setActiveMenu] = useState("ORDER ONGOING")
@@ -23,7 +25,7 @@ const HistoryPage = () => {
     }
     return (
         <>
-            <Header />
+            {/* <Header /> */}
             <View style={styles.container}>
                 <Wrapper style={styles.filterContainer}>
                         <TouchableOpacity onPress={() => {setActiveMenu("ORDER ONGOING")}} style={activeMenu === "ORDER ONGOING" ? styles.buttonFilterActive : styles.buttonFilterInActive}>
@@ -40,6 +42,9 @@ const HistoryPage = () => {
                     {componentWillBeRendered()}
                 </Wrapper>
             </View>
+            {/* <View style={{height:90, marginTop:100, marginTop:-10, backgroundColor:'transparent', position:'absolute', bottom:-5, left:0}}>
+                <NavigationReport/>
+            </View> */}
        </>
     )
 }

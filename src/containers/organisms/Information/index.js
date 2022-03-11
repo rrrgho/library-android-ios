@@ -45,6 +45,12 @@ const Information = ({style}) => {
                     <View style={styles.informationBox}>
                         <Text style={{color:'#fff', fontSize:15}}>{item.name}</Text>
                     </View>
+                    
+                    {item.new &&
+                        <View style={styles.newest}>
+                            <Text style={{color:colorPrimary}}>Terbaru</Text>
+                        </View>
+                    }
 
                     
                 </View>
@@ -89,10 +95,11 @@ const Information = ({style}) => {
                 <Carousel
                     layout={'default'}
                     data={carouselState}
-                    sliderWidth={SliderWidth + 20}
-                    itemWidth={SliderWidth - 60}
+                    sliderWidth={SliderWidth}
+                    itemWidth={SliderWidth - 100}
                     renderItem={_renderItem}
                     // loop={true}
+                    layoutCardOffset={`18`}
                     useScrollView
                     onSnapToItem={(index) => setActivateIndex(index)}
                     activeSlideAlignment="center"
@@ -106,7 +113,7 @@ const Information = ({style}) => {
 const styles = StyleSheet.create({
     container : {
         width:'100%',
-        height:200,
+        height:150,
         backgroundColor:'#fff',
         padding:5,
         paddingLeft:20,
@@ -148,6 +155,19 @@ const styles = StyleSheet.create({
         bottom:10,
         padding:10,
         borderTopRightRadius:50
+    },
+    newest : {
+        width:'20%',
+        height:'auto',
+        backgroundColor:'#fff',
+        position:'absolute',
+        top:10,
+        padding:10,
+        right:20,
+        borderRadius:20,
+        justifyContent:'center',
+        alignContent:'center',
+        alignItems:'center'
     }
 })
 

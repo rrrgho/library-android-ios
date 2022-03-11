@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Text, View, StyleSheet, FlatList, Image } from 'react-native'
+import { Text, View, StyleSheet, FlatList, Image, RefreshControl } from 'react-native'
 import { POSTAUTH } from '../../../config/Axios';
 import {colorBlur, colorDark, colorPrimary} from '../../utils/color'
 import LinearGradient from 'react-native-linear-gradient';
@@ -17,14 +17,17 @@ const BookHistoryOngoing = () => {
     const [DATA, setDATA] = useState()
     const navigation = useNavigation()
 
-
-    useEffect( async () => {
+    const getData = async () => {
         let request = await POSTAUTH('/history-berjalan');
         if(request.status === 200){
             let data = request.data.data
             setDATA(data)
         }
-        console.log(request)
+    }
+
+
+    useEffect( async () => {
+        getData()
     },[])
 
     const Item = ({ title }) => (
@@ -33,6 +36,7 @@ const BookHistoryOngoing = () => {
                 <Image style={styles.imageStyle} source={{uri:"https://img.freepik.com/free-vector/abstract-green-business-book-cover-page-brochure-template_1017-13933.jpg?size=338&ext=jpg"}} />
             </View>
             <TouchableOpacity onPress={() => {navigation.navigate('DetailHistory', {data: title})}} style={styles.content}>
+                <Text style={{fontSize:15, color:colorPrimary}}>{title.book_relation.book_number}</Text>
                 <Text style={{fontSize:15, color:'#666'}}>{title.book_relation.name}</Text>
                 <Text style={{fontSize:13, color:'green'}}>{Moment(title.start_date).format('DD MMM YYYY')} - {Moment(title.end_date).format('DD MMM YYYY')}</Text>
                 {
@@ -71,25 +75,48 @@ const BookHistoryOngoing = () => {
             </ScrollView>
         )
     }
+
+
+    const [refreshing, setRefreshing] = useState(false);
+
+    const wait = (timeout) => {
+        return new Promise(resolve => setTimeout(resolve, timeout));
+    }
+
+    const onRefresh = React.useCallback(async () => {
+        setRefreshing(true);
+        await getData()
+        wait(2000).then(() => setRefreshing(false));
+    }, []);
     
     return (
         <>
-            {
-            DATA ?
-            DATA.length > 0 ?
-                <FlatList
-                    data={DATA}
-                    renderItem={renderItem}
-                    keyExtractor={item => item.id}
-                />
-            : 
-            <View style={{width:'100%',justifyContent:'center', alignItems:'center'}}>
-                <Image source={nodata} style={{width:300, height:300, opacity:0.5}} />
-                <Text>Upps, silahkan lakukan peminjaman !!</Text>
-            </View> 
-            :
-                shimmer()       
-            }
+
+            <ScrollView style={{height:'75%'}} refreshControl={
+                <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+              />
+            }>
+                {
+                    !refreshing ? 
+                        DATA ?
+                            DATA.length > 0 ?
+                                <FlatList
+                                    data={DATA}
+                                    renderItem={renderItem}
+                                    keyExtractor={item => item.id}
+                                />
+                            : 
+                            <View style={{width:'100%',justifyContent:'center', alignItems:'center'}}>
+                                <Image source={nodata} style={{width:300, height:300, opacity:0.5}} />
+                                <Text>Upps, silahkan lakukan peminjaman !!</Text>
+                            </View> 
+                            :
+                                shimmer() 
+                            : shimmer()      
+                }
+            </ScrollView>
             
         </>
     )

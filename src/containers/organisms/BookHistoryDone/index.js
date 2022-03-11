@@ -4,41 +4,55 @@ import { POSTAUTH } from '../../../config/Axios';
 import {colorBlur, colorDark, colorPrimary} from '../../utils/color'
 import LinearGradient from 'react-native-linear-gradient';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder'
-import { ScrollView } from 'react-native';
+import { ScrollView, RefreshControl } from 'react-native';
 import nodata from '../../../assets/images/no_data.png'
+import { TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient)
 
 const BookHistoryDone = () => {
     const [DATA, setDATA] = useState()
+    const navigation = useNavigation()
 
 
-    useEffect( async () => {
+    const getData = async () => {
         let request = await POSTAUTH('/history-selesai');
         if(request.status === 200){
             let data = request.data.data
             setDATA(data)
         }
-        console.log(request)
+    }
+
+    useEffect( async () => {
+        getData()
     },[])
 
+    const goDetail = (item) => {
+        navigation.navigate('BookDetailPages',{
+            'id': item.book.id,
+            'is_rating' : !item.is_rating ? true : false,
+            'order_id' : item.id
+        })
+    }
+
     const Item = ({ title }) => (
-        <View style={styles.item}>
+        <TouchableOpacity onPress={() => {goDetail(title)}} style={styles.item}>
             <View style={styles.image}>
                 <Image style={styles.imageStyle} source={{uri:"https://img.freepik.com/free-vector/abstract-green-business-book-cover-page-brochure-template_1017-13933.jpg?size=338&ext=jpg"}} />
             </View>
             <View style={styles.content}>
                 <Text style={{fontSize:15}}>{title.book_relation.name}</Text>
-                <Text style={{fontSize:13, color:'green'}}>{title.start_date} - {title.end_date}</Text>
+                {/* <Text style={{fontSize:13, color:'green'}}>{title.start_date} - {title.end_date}</Text> */}
                 {
-                    title.isEnd ? 
-                    <View style={{height:20,  justifyContent:'center', marginTop:10, paddingLeft:10, width:200, backgroundColor:'red', borderRadius:5}}><Text style={{color:'#fff'}}>Telah Expired Dalam {title.expired} Hari</Text></View>
+                    title.is_rating ? 
+                    <View style={{height:20,  justifyContent:'center', marginTop:10, paddingLeft:10, width:200, backgroundColor:colorPrimary, borderRadius:5}}><Text style={{color:'#fff'}}>Anda telah memberi penilaian</Text></View>
                     :
-                    <Text>Masih ada</Text>
+                    <View style={{height:20,  justifyContent:'center', marginTop:10, paddingLeft:10, width:200, backgroundColor:'red', borderRadius:5}}><Text style={{color:'#fff'}}>Belum memberi penilaian</Text></View>
                 }
             </View>
-        </View>
+        </TouchableOpacity>
     );
 
     const renderItem = ({ item }) => (
@@ -67,25 +81,48 @@ const BookHistoryDone = () => {
             </ScrollView>
         )
     }
+
+
+    const [refreshing, setRefreshing] = useState(false);
+
+    const wait = (timeout) => {
+        return new Promise(resolve => setTimeout(resolve, timeout));
+    }
+
+    const onRefresh = React.useCallback(async () => {
+        setRefreshing(true);
+        await getData()
+        wait(2000).then(() => setRefreshing(false));
+    }, []);
     
     return (
         <>
-            {
-            DATA ?
-            DATA.length > 0 ?
-                <FlatList
-                    data={DATA}
-                    renderItem={renderItem}
-                    keyExtractor={item => item.id}
-                />
-            : 
-            <View style={{width:'100%',justifyContent:'center', alignItems:'center'}}>
-                <Image source={nodata} style={{width:300, height:300, opacity:0.5}} />
-                <Text>Upps, silahkan lakukan peminjaman !!</Text>
-            </View> 
-            :
-                shimmer()       
-            }
+            <ScrollView style={{height:'75%'}} refreshControl={
+                <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+              />
+            }>
+                {
+                    !refreshing ?
+                    DATA ?
+                DATA.length > 0 ?
+                    <FlatList
+                        data={DATA}
+                        renderItem={renderItem}
+                        keyExtractor={item => item.id}
+                    />
+                : 
+                <View style={{width:'100%',justifyContent:'center', alignItems:'center'}}>
+                    <Image source={nodata} style={{width:300, height:300, opacity:0.5}} />
+                    <Text>Upps, silahkan lakukan peminjaman !!</Text>
+                </View> 
+                :
+                    shimmer()   
+                    :
+                    shimmer()    
+                }
+            </ScrollView>
             
         </>
     )

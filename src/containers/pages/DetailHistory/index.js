@@ -1,13 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ScrollView } from 'react-native';
 import {View, StyleSheet, Text, Image} from 'react-native';
 import Header from '../../../components/moleculs/Header';
 import Moment from 'moment';
 import Textfield from '../../../components/atoms/Textfield'
 import MainButton from '../../../components/atoms/MainButton'
+import { useEffect } from 'react';
+import { POSTAUTH } from '../../../config/Axios';
 
 const DetailHistory = ({navigation, route}) => {
     const {data} = route.params;
+    const [userInput, setUserInput] = useState({book_id:data.book_id, extend:1})
+    useEffect(() => {
+        console.log(data)
+    }, [])
+
+    const pushInput = async () => {
+        let send = await POSTAUTH('/extend-book', userInput)
+        if(send.status === 200){
+            alert("Pengajuan diteruskan, mohon menunggu !")
+            navigation.navigate("SuccessPage")
+        }
+    }
     return (
         <>
             <Header />
@@ -22,9 +36,25 @@ const DetailHistory = ({navigation, route}) => {
                     <Text style={{fontSize:13, color:'green'}}>{Moment(data.start_date).format('DD MMM YYYY')} - {Moment(data.end_date).format('DD MMM YYYY')}</Text>
 
                     <View style={{width:'100%', borderStyle:'solid',borderWidth:1,borderColor:'#eee',marginTop:20}}></View>
-                    <Text style={{marginTop:5, color:'#888'}}>Ajukan perpanjangan waktu pemulangan buku </Text>
-                    <Textfield placeholder="Ketik jumlah hari untuk diajukan .." style={{marginTop:10}} />
-                    <MainButton containerStyle={{marginTop:10}} title="Ajukan" />
+                    {!data.isEnd ?
+                        !data.status_perpanjang ? 
+                            <>
+                                <Text style={{marginTop:5, color:'#888'}}>Ajukan perpanjangan waktu pemulangan buku </Text>
+                                <Textfield
+                                    onChangeText={(value) => {
+                                        setUserInput(prev => ({
+                                            ...prev,
+                                            extend : value
+                                        }))
+                                    }}
+                                placeholder="Ketik jumlah hari untuk diajukan .." style={{marginTop:10}} />
+                                <MainButton touchable containerStyle={{marginTop:10}} title="Ajukan" onPress={() => {pushInput()}} />
+                            </>
+                            :
+                            <Text style={{marginTop:5, color:'red'}}>Pengajuan perpanjangan sudah dilakukan, hanya bisa 1 kali ! </Text>
+                    :
+                        <Text style={{marginTop:5, color:'red'}}>Tidak dapat memperpanjang pinjaman, batas waktu telah Expired ! </Text>
+                    }
                 </View>
             </ScrollView>
         </>

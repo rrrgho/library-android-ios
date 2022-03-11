@@ -4,7 +4,7 @@ import { GETAUTH, POSTAUTH } from '../../../config/Axios';
 import {colorBlur, colorDark, colorPrimary} from '../../utils/color'
 import LinearGradient from 'react-native-linear-gradient';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder'
-import { ScrollView } from 'react-native';
+import { ScrollView, RefreshControl } from 'react-native';
 import nodata from '../../../assets/images/no_data.png'
 import Moment from 'moment';
 import { TouchableOpacity } from 'react-native';
@@ -50,13 +50,17 @@ const BookHistoryUnapproved = () => {
     }
 
 
-    useEffect( async () => {
+    const getData = async () => {
         let request = await GETAUTH('/no-approved');
         if(request.status === 200){
             let data = request.data.data
             setDATA(data)
         }
-        console.log(request)
+    }
+
+
+    useEffect( async () => {
+        getData()
     },[])
 
     const Item = ({ title }) => (
@@ -100,32 +104,55 @@ const BookHistoryUnapproved = () => {
             </ScrollView>
         )
     }
+
+
+    const [refreshing, setRefreshing] = useState(false);
+
+    const wait = (timeout) => {
+        return new Promise(resolve => setTimeout(resolve, timeout));
+    }
+
+    const onRefresh = React.useCallback(async () => {
+        setRefreshing(true);
+        await getData()
+        wait(2000).then(() => setRefreshing(false));
+    }, []);
     
     return (
         <>
 
-            
-            {
-            DATA ?
-            DATA.length > 0 ?
-                <>
-                    <View style={{paddingHorizontal:10}}>
-                        <Text style={{color:'#888'}}> <FontAwesomeIcon style={{color:colorPrimary}} icon={faExclamationCircle} /> Tekan dan tahan untuk membatalkan</Text>
-                    </View>
-                    <FlatList
-                        data={DATA}
-                        renderItem={renderItem}
-                        keyExtractor={item => item.id}
-                    />
-                </>
-            : 
-            <View style={{width:'100%',justifyContent:'center', alignItems:'center'}}>
-                <Image source={nodata} style={{width:300, height:300, opacity:0.5}} />
-                <Text>Upps, silahkan lakukan peminjaman !!</Text>
-            </View> 
-            :
-                shimmer()       
-            }
+            <ScrollView style={{height:'75%'}} refreshControl={
+                <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+              />
+            }>
+
+                {
+                    !refreshing ?
+                    DATA ?
+                DATA.length > 0 ?
+                    <>
+                        <View style={{paddingHorizontal:10}}>
+                            <Text style={{color:'#888'}}> <FontAwesomeIcon style={{color:colorPrimary}} icon={faExclamationCircle} /> Tekan dan tahan untuk membatalkan</Text>
+                        </View>
+                        <FlatList
+                            data={DATA}
+                            renderItem={renderItem}
+                            keyExtractor={item => item.id}
+                        />
+                    </>
+                : 
+                <View style={{width:'100%',justifyContent:'center', alignItems:'center'}}>
+                    <Image source={nodata} style={{width:300, height:300, opacity:0.5}} />
+                    <Text>Upps, silahkan lakukan peminjaman !!</Text>
+                </View> 
+                :
+                    shimmer() 
+                    :
+                    shimmer()      
+                }
+            </ScrollView>
 
             <BottomSheet
             isVisible={isVisible}

@@ -43,7 +43,7 @@ const LevelFloating = () => {
                     {
                         data ?
                             <>
-                                <Text style={{color:colorPrimary, fontSize:16}}>{data.name}</Text>
+                                <Text style={{color:colorPrimary, fontSize:16}}>{data.name.split(' ').slice(0,1).join(' ')}</Text>
                                 <Text style={{color:colorDark, fontSize:13}}>No. {data.user_number}</Text> 
                             </>
                             :
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
         overflow:'hidden'
     },
     levelBox:{
-        flex:1,
+        width:"auto",
         height:60,
         backgroundColor:'#fff',
         borderLeftWidth:2,
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
         marginLeft:10,
     },
     coinBox:{
-        width:'auto',
+        flex:1,
         height:60,
         backgroundColor:'#fff',
         borderLeftWidth:2,

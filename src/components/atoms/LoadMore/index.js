@@ -15,14 +15,14 @@ const LoadMore = (props) => {
     const render = () => {
         if(props.touchable){
             return (
-                <TouchableOpacity onPress={props.onPress} style={[styles.container, {backgroundColor:props.fade ? colorBlue : background}, props.containerStyle]}>
-                    <FontAwesomeIcon style={{color:'#fff'}} icon={faSyncAlt} /><Text style={{color:'#FFFFFF', marginLeft:10}}>{props.title ?? 'Load More'}</Text>
+                <TouchableOpacity onPress={props.onPress} style={[styles.container, {}, props.containerStyle]}>
+                    <FontAwesomeIcon style={{color:'#888'}} icon={faSyncAlt} /><Text style={{color:'#888', marginLeft:10}}>{props.title ?? 'Click to Load More'}</Text>
                 </TouchableOpacity>
             )
         }else{
             return (
                 <View style={[styles.container, {backgroundColor:props.fade ? colorBlue : background}, props.containerStyle]}>
-                    <FontAwesomeIcon style={{color:'#fff'}} icon={faSyncAlt} /><Text style={{color:'#FFFFFF', marginLeft:10}}>{props.title ?? 'Load More'}</Text>
+                    <FontAwesomeIcon style={{color:'#888'}} icon={faSyncAlt} /><Text style={{color:'#888', marginLeft:10}}>{props.title ?? 'Click to Load More'}</Text>
                 </View>
             )
         }
@@ -34,10 +34,10 @@ const LoadMore = (props) => {
 
 const styles = StyleSheet.create({
     container:{
-        width: responsiveWidth(30),
+        width: responsiveWidth(100),
         height: responsiveHeight(7),
         alignItems: 'center',
-        backgroundColor: '#16B1CF',
+        backgroundColor: '#fff',
         justifyContent: 'center',
         alignSelf: 'center',
         borderRadius: 10,

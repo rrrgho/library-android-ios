@@ -1,23 +1,25 @@
-import React, { useEffect } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { StyleSheet, Text, View, Image, AsyncStorage } from 'react-native'
+import Wrapper from '../../../components/atoms/Wrapper'
 import {Auth} from '../../../config/Auth'
 import LoginForm from '../../organisms/LoginForm'
 import { colorDark, colorPrimary } from '../../utils/color'
+import MainLogo from '../../../assets/images/mainlogo.jpeg'
+import Textfield from '../../../components/atoms/Textfield'
+import MainButton from '../../../components/atoms/MainButton'
+import { POST } from '../../../config/Axios'
 
 const LoginPage = ({navigation}) => {
-    useEffect( async () => {
-        if(await Auth()){
-            navigation.navigate("HomePage")
-        }        
-    },[])
-
-    useEffect(
-        () =>
-          navigation.addListener('beforeRemove', (e) => {
+    
+    useEffect(async () => {
+        await AsyncStorage.clear();
+        navigation.addListener('beforeRemove', (e) => {
+    
+            // Prevent default behavior of leaving the screen
             e.preventDefault();
-          }),
-        []
-      );
+        })
+            
+    }, [])
     return (
         <>
             <View style={styles.loginContainer}>
@@ -44,6 +46,32 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         borderTopWidth:1,
         borderTopColor:"#eee"
+    },
+    logoBox:{
+        flex:1,
+        backgroundColor:'#fff',
+        justifyContent:'center',
+        alignItems:'center',
+    },
+    logo:{
+        width:150,
+        height:150
+    },
+    logoText:{
+        marginTop:20,
+        fontSize:20,
+        color:colorPrimary,
+        fontWeight:'bold',
+    },
+    logoSubText:{
+        marginTop:10,
+        fontSize:15,
+        color:colorDark,
+        fontWeight:'bold',
+    },
+    inputBox:{
+        height:400,
+        backgroundColor:'#fff'
     },
 })
 

@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux'
 import bookReducer from './BookReducer/BookReducer'
 import initialReducer from './InitialReducer/InitialReducer'
+import preferencesReducer from './Preferences'
 
 
 
@@ -8,4 +9,5 @@ import initialReducer from './InitialReducer/InitialReducer'
 export default combineReducers({
     initialReducer,
     bookReducer,
+    preferencesReducer
 })

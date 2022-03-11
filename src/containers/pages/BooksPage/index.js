@@ -4,12 +4,14 @@ import Books from '../../organisms/Books'
 import Header from '../../../components/moleculs/Header'
 import axios from "axios"
 // import { TouchableOpacity } from 'react-native-gesture-handler';
-const BooksPage = ({navigation}) => {
-
+const BooksPage = ({route,navigation}) => {
+    let ocr_search = null
+    if(route.params)
+        ocr_search = route.params.ocr_search
     return(
         <>
-            <Header />
-            <Books />
+            {/* <Header /> */}
+            <Books ocr_search={ocr_search} />
         </>
     )
 }

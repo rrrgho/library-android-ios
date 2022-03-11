@@ -42,6 +42,23 @@ const POSTAUTH = async (endpoint,data) => {
     return result
 }
 
+const POSTFILEAUTH = async (endpoint,data) => {
+    let result = false
+    await axios.post(`${BASE_URL}${endpoint}`,data, { 
+        headers: {
+            "Authorization" : await access_token(),
+            'Content-Type': 'multipart/form-data',
+        } 
+    })
+    .then(response => {
+        result = response
+    })
+    .catch((error) => {
+        result = error.response
+    })
+    return result
+}
+
 const GETAUTH = async (endpoint) => {
     let result = false
     await axios.get(`${BASE_URL}${endpoint}`, { headers: {"Authorization" : await access_token()} })
@@ -59,5 +76,6 @@ export {
     POST,
     GET,
     POSTAUTH,
+    POSTFILEAUTH,
     GETAUTH
 }

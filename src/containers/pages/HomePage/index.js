@@ -14,6 +14,7 @@ import { colorPrimary } from '../../utils/color';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder'
 import Information from '../../organisms/Information';
 import SliderBanner from '../../organisms/SliderBanner';
+import Notification from '../../organisms/Notification';
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient)
 
 const {width} = Dimensions.get("window");
@@ -49,11 +50,8 @@ const HomePage = ({navigation, style, ...props}) => {
     useEffect( () => {
         getData()
     }, [])
- 
 
-    const check = () => {
-        console.log(images)
-    }
+
 
 
 
@@ -90,6 +88,7 @@ const HomePage = ({navigation, style, ...props}) => {
                 
 
                 <LevelFloating />
+                <Notification />
                 <MainMenu />
                 <SliderBanner style={{container: {marginTop:20}}}/>
                 <View style={{paddingHorizontal:35, marginTop:20}}>
@@ -100,9 +99,9 @@ const HomePage = ({navigation, style, ...props}) => {
             </ScrollView>
 
         </View>
-        <View style={{height:90, marginTop:100, marginTop:-10, backgroundColor:'transparent', position:'absolute', bottom:-5, left:0}}>
+        {/* <View style={{height:90, marginTop:100, marginTop:-10, backgroundColor:'transparent', position:'absolute', bottom:-5, left:0}}>
             <NavigationReport/>
-        </View>
+        </View> */}
         </>
 
     )

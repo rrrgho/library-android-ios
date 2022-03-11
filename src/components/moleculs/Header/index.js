@@ -10,9 +10,9 @@ const Header = ({isChat}) => {
     const navigation = useNavigation();
     return (
         <Wrapper style={{height:50,backgroundColor:'#fff',borderColor:colorBlur, borderBottomWidth:1, justifyContent:'center'}}>
-            <TouchableOpacity onPress={() => {navigation.goBack();}} style={{flexDirection:'row'}}>
+            <TouchableOpacity onPress={() => {navigation.goBack()}} style={{flexDirection:'row'}}>
                 <FontAwesomeIcon icon={faArrowLeft} size={20} style={{color:colorDark}}/>
-                {isChat && <Text style={{fontSize:14, color:'#888', marginLeft:10}}>Admin YP SIM Medan</Text>}
+                {isChat && <Text style={{fontSize:14, color:'#888', marginLeft:10}}>Terhubung dengan RoboSim</Text>}
             </TouchableOpacity>
         </Wrapper>
     )

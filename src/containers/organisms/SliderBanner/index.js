@@ -39,7 +39,7 @@ const SliderBanner = ({style}) => {
                     {/* <Image style={{height:'100%', width:'100%', resizeMode:'cover'}} source={{uri: 'https://cdn.pixabay.com/photo/2016/03/31/21/14/bee-1296273_960_720.png'}} /> */}
                 </View>
                 <View style={{width:'20%', height:50, marginTop:10, marginLeft:50}}>
-                    <Image style={{height:'100%', width:'100%', resizeMode:'cover'}} source={{uri: 'https://cdn.pixabay.com/photo/2016/03/31/21/14/bee-1296273_960_720.png'}} />
+                    {/* <Image style={{height:'100%', width:'100%', resizeMode:'cover', opacity:0.5}} source={{uri: 'https://cdn.pixabay.com/photo/2016/03/31/21/14/bee-1296273_960_720.png'}} /> */}
                 </View>
                 {/* <Image source={{uri: `${item.images}`}} style={{height:'100%', width:'100%', resizeMode:'cover'}} /> */}
                 <View style={styles.informationItem}>
@@ -50,7 +50,7 @@ const SliderBanner = ({style}) => {
                     
 
                     <View style={styles.informationBox}>
-                        <Text style={{color:'#fff', fontSize:15}}>{item.title}</Text>
+                        <Text style={{color:colorPrimary, fontSize:15, fontWeight:'bold'}}>{item.title}</Text>
                     </View>
 
                     
@@ -64,7 +64,6 @@ const SliderBanner = ({style}) => {
     useEffect(async () => {
         let request = await GET('/slide-banner');
         let response = request.data.data
-        console.log(response)
         setCarouselState(response)
     },[])
     
@@ -152,11 +151,11 @@ const styles = StyleSheet.create({
     informationBox : {
         width:'80%',
         height:'auto',
-        backgroundColor:colorPrimary,
+        backgroundColor:'#fff',
         position:'absolute',
         bottom:10,
         padding:10,
-        borderTopRightRadius:50
+        // borderTopRightRadius:50
     }
 })
 

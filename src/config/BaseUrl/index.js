@@ -1,3 +1,4 @@
-const BASE_URL = "http://admin.ypsimlibrary.com/api"
 
-export default BASE_URL
+const BASE_URL = 'https://admin.ypsimlibrary.com/api';
+
+export default BASE_URL;
